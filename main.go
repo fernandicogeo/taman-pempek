@@ -2,12 +2,12 @@ package main
 
 import (
 	"log"
-	"os/user"
 	"taman-pempek/bank"
 	"taman-pempek/product"
 	"taman-pempek/productcategory"
 	"taman-pempek/transaction"
 	"taman-pempek/transactiondetail"
+	"taman-pempek/user"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
