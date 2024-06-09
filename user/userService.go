@@ -1,6 +1,11 @@
 package user
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+
+	"gorm.io/gorm"
+)
 
 type UserService interface {
 	FindAll() ([]User, error)
@@ -52,7 +57,15 @@ func (s *service) CreateUser(userRequest UserCreateRequest) (User, error) {
 }
 
 func (s *service) UpdateUser(ID int, userRequest UserUpdateRequest) (User, error) {
-	user, _ := s.userRepository.FindUserByID(ID)
+	user, err := s.userRepository.FindUserByID(ID)
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return User{}, errors.New("User not found")
+	}
+
+	if err != nil {
+		return User{}, err
+	}
 
 	user.UserName = userRequest.UserName
 	user.Email = userRequest.Email

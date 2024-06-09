@@ -130,7 +130,11 @@ func (cn *controller) UpdateUser(c *gin.Context) {
 	user, err := cn.userService.UpdateUser(id, userRequest)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
+		statusCode := http.StatusInternalServerError
+		if err.Error() == "User not found" {
+			statusCode = http.StatusNotFound
+		}
+		c.JSON(statusCode, gin.H{
 			"errors": err.Error(),
 		})
 		return
