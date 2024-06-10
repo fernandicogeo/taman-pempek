@@ -159,8 +159,12 @@ func (ch *controller) DeleteProduct(c *gin.Context) {
 	product, err := ch.productService.DeleteProduct(id)
 
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err,
+		statusCode := http.StatusInternalServerError
+		if err.Error() == "Product not found" {
+			statusCode = http.StatusNotFound
+		}
+		c.JSON(statusCode, gin.H{
+			"errors": err.Error(),
 		})
 		return
 	}

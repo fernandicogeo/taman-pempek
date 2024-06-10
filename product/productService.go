@@ -67,7 +67,15 @@ func (s *service) UpdateProduct(ID int, productRequest ProductUpdateRequest) (Pr
 }
 
 func (s *service) DeleteProduct(ID int) (Product, error) {
-	product, _ := s.productRepository.FindProductByID(ID)
+	product, err := s.productRepository.FindProductByID(ID)
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return Product{}, errors.New("Product not found")
+	}
+
+	if err != nil {
+		return Product{}, err
+	}
 
 	return s.productRepository.DeleteProduct(product)
 }

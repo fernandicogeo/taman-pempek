@@ -28,6 +28,7 @@ func main() {
 
 	routeUser(db, v1)
 	routeProduct(db, v1)
+	routeBank(db, v1)
 
 	router.Run(":8888") // port
 }
@@ -62,4 +63,16 @@ func routeProduct(db *gorm.DB, v *gin.RouterGroup) {
 	v.POST("/product/create", productController.CreateProduct)
 	v.PUT("/product/update/:id", productController.UpdateProduct)
 	v.DELETE("/product/delete/:id", productController.DeleteProduct)
+}
+
+func routeBank(db *gorm.DB, v *gin.RouterGroup) {
+	bankRepository := bank.NewRepository(db)
+	bankService := bank.NewService(bankRepository)
+	bankController := bank.NewController(bankService)
+
+	v.GET("/banks", bankController.GetBanks)
+	v.GET("/bank/:id", bankController.GetBank)
+	v.POST("/bank/create", bankController.CreateBank)
+	v.PUT("/bank/update/:id", bankController.UpdateBank)
+	v.DELETE("/bank/delete/:id", bankController.DeleteBank)
 }

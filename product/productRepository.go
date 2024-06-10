@@ -18,6 +18,10 @@ type repository struct {
 	db *gorm.DB
 }
 
+func NewRepository(db *gorm.DB) *repository {
+	return &repository{db}
+}
+
 func (r *repository) FindAll() ([]Product, error) {
 	var products []Product
 	err := r.db.Find(&products).Error
@@ -31,10 +35,6 @@ func (r *repository) FindProductByID(ID int) (Product, error) {
 		return Product{}, errors.New("Product not found")
 	}
 	return product, err
-}
-
-func NewRepository(db *gorm.DB) *repository {
-	return &repository{db}
 }
 
 func (r *repository) CreateProduct(product Product) (Product, error) {

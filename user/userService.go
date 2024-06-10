@@ -67,7 +67,15 @@ func (s *service) UpdateUser(ID int, userRequest UserUpdateRequest) (User, error
 }
 
 func (s *service) DeleteUser(ID int) (User, error) {
-	user, _ := s.userRepository.FindUserByID(ID)
+	user, err := s.userRepository.FindUserByID(ID)
+
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return User{}, errors.New("User not found")
+	}
+
+	if err != nil {
+		return User{}, err
+	}
 
 	return s.userRepository.DeleteUser(user)
 }

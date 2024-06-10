@@ -1,4 +1,4 @@
-package user
+package bank
 
 import (
 	"fmt"
@@ -10,15 +10,15 @@ import (
 )
 
 type controller struct {
-	userService UserService
+	bankService BankService
 }
 
-func NewController(userService UserService) *controller {
-	return &controller{userService}
+func NewController(bankService BankService) *controller {
+	return &controller{bankService}
 }
 
-func (cn *controller) GetUsers(c *gin.Context) {
-	users, err := cn.userService.FindAll()
+func (cn *controller) GetBanks(c *gin.Context) {
+	banks, err := cn.bankService.FindAll()
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -27,35 +27,35 @@ func (cn *controller) GetUsers(c *gin.Context) {
 		return
 	}
 
-	var usersResponse []UserResponse
+	var banksResponse []BankResponse
 
-	for _, user := range users {
-		userResponse := convertToUserResponse(user)
+	for _, bank := range banks {
+		bankResponse := convertToBankResponse(bank)
 
-		usersResponse = append(usersResponse, userResponse)
+		banksResponse = append(banksResponse, bankResponse)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": usersResponse,
+		"data": banksResponse,
 	})
 }
 
-func (cn *controller) GetUser(c *gin.Context) {
+func (cn *controller) GetBank(c *gin.Context) {
 	idString := c.Param("id")
 	id, err := strconv.Atoi(idString)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid user ID",
+			"errors": "Invalid bank ID",
 		})
 		return
 	}
 
-	user, err := cn.userService.FindUserByID(id)
+	bank, err := cn.bankService.FindBankByID(id)
 
 	if err != nil {
 		statusCode := http.StatusInternalServerError
-		if err.Error() == "User not found" {
+		if err.Error() == "Bank not found" {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
@@ -65,14 +65,14 @@ func (cn *controller) GetUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToUserResponse(user),
+		"data": convertToBankResponse(bank),
 	})
 }
 
-func (cn *controller) CreateUser(c *gin.Context) {
-	var userRequest UserCreateRequest
+func (cn *controller) CreateBank(c *gin.Context) {
+	var bankRequest BankCreateRequest
 
-	err := c.ShouldBindJSON(&userRequest)
+	err := c.ShouldBindJSON(&bankRequest)
 
 	if err != nil {
 		errorMessages := []string{}
@@ -86,7 +86,7 @@ func (cn *controller) CreateUser(c *gin.Context) {
 		return
 	}
 
-	user, err := cn.userService.CreateUser(userRequest)
+	bank, err := cn.bankService.CreateBank(bankRequest)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -96,14 +96,14 @@ func (cn *controller) CreateUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToUserResponse(user),
+		"data": convertToBankResponse(bank),
 	})
 }
 
-func (cn *controller) UpdateUser(c *gin.Context) {
-	var userRequest UserUpdateRequest
+func (cn *controller) UpdateBank(c *gin.Context) {
+	var bankRequest BankUpdateRequest
 
-	err := c.ShouldBindJSON(&userRequest)
+	err := c.ShouldBindJSON(&bankRequest)
 
 	if err != nil {
 		errorMessages := []string{}
@@ -122,16 +122,16 @@ func (cn *controller) UpdateUser(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid user ID",
+			"errors": "Invalid bank ID",
 		})
 		return
 	}
 
-	user, err := cn.userService.UpdateUser(id, userRequest)
+	bank, err := cn.bankService.UpdateBank(id, bankRequest)
 
 	if err != nil {
 		statusCode := http.StatusInternalServerError
-		if err.Error() == "User not found" {
+		if err.Error() == "Bank not found" {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
@@ -141,26 +141,26 @@ func (cn *controller) UpdateUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToUserResponse(user),
+		"data": convertToBankResponse(bank),
 	})
 }
 
-func (ch *controller) DeleteUser(c *gin.Context) {
+func (ch *controller) DeleteBank(c *gin.Context) {
 	idString := c.Param("id")
 	id, err := strconv.Atoi(idString)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid user ID",
+			"errors": "Invalid bank ID",
 		})
 		return
 	}
 
-	user, err := ch.userService.DeleteUser(id)
+	bank, err := ch.bankService.DeleteBank(id)
 
 	if err != nil {
 		statusCode := http.StatusInternalServerError
-		if err.Error() == "User not found" {
+		if err.Error() == "Bank not found" {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
@@ -170,18 +170,15 @@ func (ch *controller) DeleteUser(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToUserResponse(user),
+		"data": convertToBankResponse(bank),
 	})
 }
 
-func convertToUserResponse(user User) UserResponse {
-	return UserResponse{
-		ID:       user.ID,
-		Name:     user.Name,
-		Email:    user.Email,
-		Password: user.Password,
-		Whatsapp: user.Whatsapp,
-		Gender:   user.Gender,
-		Role:     user.Role,
+func convertToBankResponse(bank Bank) BankResponse {
+	return BankResponse{
+		ID:     bank.ID,
+		Type:   bank.Type,
+		Name:   bank.Name,
+		Number: bank.Number,
 	}
 }
