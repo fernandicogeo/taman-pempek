@@ -6,7 +6,6 @@ import (
 	"taman-pempek/product"
 	"taman-pempek/productcategory"
 	"taman-pempek/transaction"
-	"taman-pempek/transactiondetail"
 	"taman-pempek/user"
 
 	"github.com/gin-gonic/gin"
@@ -38,7 +37,6 @@ func migration(db *gorm.DB) {
 	db.AutoMigrate(&product.Product{})
 	db.AutoMigrate(&productcategory.ProductCategory{})
 	db.AutoMigrate(&transaction.Transaction{})
-	db.AutoMigrate(&transactiondetail.TransactionDetail{})
 	db.AutoMigrate(&user.User{})
 }
 
@@ -54,12 +52,12 @@ func routeUser(db *gorm.DB, v *gin.RouterGroup) {
 }
 
 func routeProduct(db *gorm.DB, v *gin.RouterGroup) {
-	userRepository := user.NewRepository(db)
-	userService := user.NewService(userRepository)
-	userController := user.NewController(userService)
+	productRepository := product.NewRepository(db)
+	productService := product.NewService(productRepository)
+	productController := product.NewController(productService)
 
-	v.GET("/products", userController.GetUsers)
-	v.GET("/product/:id", userController.GetUser)
-	v.POST("/product/register", userController.CreateUser)
-	v.PUT("/product/update/:id", userController.UpdateUser)
+	v.GET("/products", productController.GetProducts)
+	v.GET("/product/:id", productController.GetProduct)
+	v.POST("/product/create", productController.CreateProduct)
+	v.PUT("/product/update/:id", productController.UpdateProduct)
 }
