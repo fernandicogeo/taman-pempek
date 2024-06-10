@@ -2,7 +2,6 @@ package user
 
 import (
 	"errors"
-	"fmt"
 
 	"gorm.io/gorm"
 )
@@ -32,28 +31,17 @@ func (s *service) FindUserByID(ID int) (User, error) {
 
 func (s *service) CreateUser(userRequest UserCreateRequest) (User, error) {
 	userData := User{
-		Role:               "USER",
-		UserName:           userRequest.UserName,
-		Email:              userRequest.Email,
-		Password:           userRequest.Password,
-		UserWhatsappNumber: userRequest.UserWhatsappNumber,
-		UserGender:         userRequest.UserGender,
-		UserIsDeleted:      false,
+		Name:     userRequest.Name,
+		Email:    userRequest.Email,
+		Password: userRequest.Password,
+		Whatsapp: userRequest.Whatsapp,
+		Gender:   userRequest.Gender,
+		Role:     userRequest.Role,
 	}
 
 	user, err := s.userRepository.CreateUser(userData)
-	if err != nil {
-		return user, err
-	}
 
-	user.UserCode = fmt.Sprintf("USER%d", user.ID)
-
-	newUser, err := s.userRepository.UpdateUser(user)
-	if err != nil {
-		return newUser, err
-	}
-
-	return newUser, err
+	return user, err
 }
 
 func (s *service) UpdateUser(ID int, userRequest UserUpdateRequest) (User, error) {
@@ -67,11 +55,12 @@ func (s *service) UpdateUser(ID int, userRequest UserUpdateRequest) (User, error
 		return User{}, err
 	}
 
-	user.UserName = userRequest.UserName
+	user.Name = userRequest.Name
 	user.Email = userRequest.Email
 	user.Password = userRequest.Password
-	user.UserWhatsappNumber = userRequest.UserWhatsappNumber
-	user.UserGender = userRequest.UserGender
+	user.Whatsapp = userRequest.Whatsapp
+	user.Gender = userRequest.Gender
+	user.Role = userRequest.Role
 
 	return s.userRepository.UpdateUser(user)
 }

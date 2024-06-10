@@ -22,9 +22,15 @@ func main() {
 		log.Fatal("DB Connection error")
 	}
 
+	router := gin.Default()
+	v1 := router.Group("/v1")
+
 	migration(db)
 
-	routeUser(db)
+	routeUser(db, v1)
+	routeProduct(db, v1)
+
+	router.Run(":8888") // port
 }
 
 func migration(db *gorm.DB) {
@@ -36,19 +42,24 @@ func migration(db *gorm.DB) {
 	db.AutoMigrate(&user.User{})
 }
 
-func routeUser(db *gorm.DB) {
+func routeUser(db *gorm.DB, v *gin.RouterGroup) {
 	userRepository := user.NewRepository(db)
 	userService := user.NewService(userRepository)
 	userController := user.NewController(userService)
 
-	router := gin.Default()
+	v.GET("/users", userController.GetUsers)
+	v.GET("/user/:id", userController.GetUser)
+	v.POST("/user/register", userController.CreateUser)
+	v.PUT("/user/update/:id", userController.UpdateUser)
+}
 
-	v1 := router.Group("/v1")
+func routeProduct(db *gorm.DB, v *gin.RouterGroup) {
+	userRepository := user.NewRepository(db)
+	userService := user.NewService(userRepository)
+	userController := user.NewController(userService)
 
-	v1.GET("/users", userController.GetUsers)
-	v1.GET("/user/:id", userController.GetUser)
-	v1.POST("/user/register", userController.CreateUser)
-	v1.PUT("/user/update/:id", userController.UpdateUser)
-
-	router.Run(":8888") // port
+	v.GET("/products", userController.GetUsers)
+	v.GET("/product/:id", userController.GetUser)
+	v.POST("/product/register", userController.CreateUser)
+	v.PUT("/product/update/:id", userController.UpdateUser)
 }

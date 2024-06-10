@@ -147,13 +147,12 @@ func (cn *controller) UpdateUser(c *gin.Context) {
 
 func convertToUserResponse(user User) UserResponse {
 	return UserResponse{
-		ID:                 user.ID,
-		UserCode:           user.UserCode,
-		Role:               user.Role,
-		UserName:           user.UserName,
-		Email:              user.Email,
-		Password:           user.Password,
-		UserWhatsappNumber: user.UserWhatsappNumber,
-		UserGender:         user.UserGender,
+		ID:       user.ID,
+		Name:     user.Name,
+		Email:    user.Email,
+		Password: user.Password,
+		Whatsapp: user.Whatsapp,
+		Gender:   user.Gender,
+		Role:     user.Role,
 	}
 }
