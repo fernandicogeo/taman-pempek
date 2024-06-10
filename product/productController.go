@@ -145,6 +145,31 @@ func (cn *controller) UpdateProduct(c *gin.Context) {
 	})
 }
 
+func (ch *controller) DeleteProduct(c *gin.Context) {
+	idString := c.Param("id")
+	id, err := strconv.Atoi(idString)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": "Invalid product ID",
+		})
+		return
+	}
+
+	product, err := ch.productService.DeleteProduct(id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": convertToProductResponse(product),
+	})
+}
+
 func convertToProductResponse(product Product) ProductResponse {
 	return ProductResponse{
 		ID:          product.ID,

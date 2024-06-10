@@ -11,6 +11,7 @@ type ProductRepository interface {
 	FindProductByID(ID int) (Product, error)
 	CreateProduct(product Product) (Product, error)
 	UpdateProduct(product Product) (Product, error)
+	DeleteProduct(product Product) (Product, error)
 }
 
 type repository struct {
@@ -43,5 +44,10 @@ func (r *repository) CreateProduct(product Product) (Product, error) {
 
 func (r *repository) UpdateProduct(product Product) (Product, error) {
 	err := r.db.Save(&product).Error
+	return product, err
+}
+
+func (r *repository) DeleteProduct(product Product) (Product, error) {
+	err := r.db.Delete(&product).Error
 	return product, err
 }

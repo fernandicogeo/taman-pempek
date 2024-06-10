@@ -11,6 +11,7 @@ type ProductService interface {
 	FindProductByID(ID int) (Product, error)
 	CreateProduct(product ProductCreateRequest) (Product, error)
 	UpdateProduct(ID int, product ProductUpdateRequest) (Product, error)
+	DeleteProduct(ID int) (Product, error)
 }
 
 type service struct {
@@ -63,4 +64,10 @@ func (s *service) UpdateProduct(ID int, productRequest ProductUpdateRequest) (Pr
 	product.Stock = productRequest.Stock
 
 	return s.productRepository.UpdateProduct(product)
+}
+
+func (s *service) DeleteProduct(ID int) (Product, error) {
+	product, _ := s.productRepository.FindProductByID(ID)
+
+	return s.productRepository.DeleteProduct(product)
 }

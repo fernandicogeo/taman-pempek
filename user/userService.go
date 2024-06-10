@@ -11,6 +11,7 @@ type UserService interface {
 	FindUserByID(ID int) (User, error)
 	CreateUser(user UserCreateRequest) (User, error)
 	UpdateUser(ID int, user UserUpdateRequest) (User, error)
+	DeleteUser(ID int) (User, error)
 }
 
 type service struct {
@@ -63,4 +64,10 @@ func (s *service) UpdateUser(ID int, userRequest UserUpdateRequest) (User, error
 	user.Role = userRequest.Role
 
 	return s.userRepository.UpdateUser(user)
+}
+
+func (s *service) DeleteUser(ID int) (User, error) {
+	user, _ := s.userRepository.FindUserByID(ID)
+
+	return s.userRepository.DeleteUser(user)
 }

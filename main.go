@@ -49,6 +49,7 @@ func routeUser(db *gorm.DB, v *gin.RouterGroup) {
 	v.GET("/user/:id", userController.GetUser)
 	v.POST("/user/register", userController.CreateUser)
 	v.PUT("/user/update/:id", userController.UpdateUser)
+	v.DELETE("/user/delete/:id", userController.DeleteUser)
 }
 
 func routeProduct(db *gorm.DB, v *gin.RouterGroup) {
@@ -60,4 +61,5 @@ func routeProduct(db *gorm.DB, v *gin.RouterGroup) {
 	v.GET("/product/:id", productController.GetProduct)
 	v.POST("/product/create", productController.CreateProduct)
 	v.PUT("/product/update/:id", productController.UpdateProduct)
+	v.DELETE("/product/delete/:id", productController.DeleteProduct)
 }

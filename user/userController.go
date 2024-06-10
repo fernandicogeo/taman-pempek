@@ -145,6 +145,31 @@ func (cn *controller) UpdateUser(c *gin.Context) {
 	})
 }
 
+func (ch *controller) DeleteUser(c *gin.Context) {
+	idString := c.Param("id")
+	id, err := strconv.Atoi(idString)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": "Invalid user ID",
+		})
+		return
+	}
+
+	user, err := ch.userService.DeleteUser(id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"data": convertToUserResponse(user),
+	})
+}
+
 func convertToUserResponse(user User) UserResponse {
 	return UserResponse{
 		ID:       user.ID,
