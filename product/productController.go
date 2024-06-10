@@ -118,7 +118,7 @@ func (cn *controller) UpdateProduct(c *gin.Context) {
 	}
 
 	idString := c.Param("id")
-	id, _ := strconv.Atoi(idString)
+	id, err := strconv.Atoi(idString)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
