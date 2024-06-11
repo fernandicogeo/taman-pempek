@@ -23,9 +23,9 @@ func NewRepository(db *gorm.DB) *repository {
 }
 
 func (r *repository) FindAll() ([]Delivery, error) {
-	var deliverys []Delivery
-	err := r.db.Find(&deliverys).Error
-	return deliverys, err
+	var deliveries []Delivery
+	err := r.db.Find(&deliveries).Error
+	return deliveries, err
 }
 
 func (r *repository) FindDeliveryByID(ID int) (Delivery, error) {
