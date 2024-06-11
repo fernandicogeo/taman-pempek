@@ -32,8 +32,8 @@ func (s *service) FindProductByID(ID int) (Product, error) {
 
 func (s *service) CreateProduct(productRequest ProductCreateRequest) (Product, error) {
 	productData := Product{
-		UserID:      1,
-		CategoryID:  1,
+		UserID:      productRequest.UserID,
+		CategoryID:  productRequest.CategoryID,
 		Name:        productRequest.Name,
 		Image:       productRequest.Image,
 		Description: productRequest.Description,
@@ -57,6 +57,7 @@ func (s *service) UpdateProduct(ID int, productRequest ProductUpdateRequest) (Pr
 		return Product{}, err
 	}
 
+	product.CategoryID = productRequest.CategoryID
 	product.Name = productRequest.Name
 	product.Image = productRequest.Image
 	product.Description = productRequest.Description
