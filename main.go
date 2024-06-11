@@ -3,10 +3,10 @@ package main
 import (
 	"log"
 	"taman-pempek/bank"
+	"taman-pempek/cart"
 	"taman-pempek/category"
 	"taman-pempek/delivery"
 	"taman-pempek/product"
-	"taman-pempek/transaction"
 	"taman-pempek/user"
 
 	"github.com/gin-gonic/gin"
@@ -32,6 +32,7 @@ func main() {
 	routeBank(db, v1)
 	routeCategory(db, v1)
 	routeDelivery(db, v1)
+	routeCart(db, v1)
 
 	router.Run(":8888") // port
 }
@@ -41,7 +42,7 @@ func migration(db *gorm.DB) {
 	db.AutoMigrate(&product.Product{})
 	db.AutoMigrate(&category.Category{})
 	db.AutoMigrate(&delivery.Delivery{})
-	db.AutoMigrate(&transaction.Transaction{})
+	db.AutoMigrate(&cart.Cart{})
 	db.AutoMigrate(&user.User{})
 }
 
@@ -103,4 +104,16 @@ func routeDelivery(db *gorm.DB, v *gin.RouterGroup) {
 	v.POST("/delivery/create", deliveryController.CreateDelivery)
 	v.PUT("/delivery/update/:id", deliveryController.UpdateDelivery)
 	v.DELETE("/delivery/delete/:id", deliveryController.DeleteDelivery)
+}
+
+func routeCart(db *gorm.DB, v *gin.RouterGroup) {
+	cartRepository := cart.NewRepository(db)
+	cartService := cart.NewService(cartRepository)
+	cartController := cart.NewController(cartService)
+
+	v.GET("/carts", cartController.GetCarts)
+	v.GET("/cart/:id", cartController.GetCart)
+	v.POST("/cart/create", cartController.CreateCart)
+	v.PUT("/cart/update/:id", cartController.UpdateCart)
+	v.DELETE("/cart/delete/:id", cartController.DeleteCart)
 }
