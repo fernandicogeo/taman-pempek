@@ -6,6 +6,7 @@ import (
 	"taman-pempek/cart"
 	"taman-pempek/category"
 	"taman-pempek/delivery"
+	"taman-pempek/payment"
 	"taman-pempek/product"
 	"taman-pempek/user"
 
@@ -33,16 +34,18 @@ func main() {
 	routeCategory(db, v1)
 	routeDelivery(db, v1)
 	routeCart(db, v1)
+	routePayment(db, v1)
 
 	router.Run(":8888") // port
 }
 
 func migration(db *gorm.DB) {
 	db.AutoMigrate(&bank.Bank{})
-	db.AutoMigrate(&product.Product{})
+	db.AutoMigrate(&cart.Cart{})
 	db.AutoMigrate(&category.Category{})
 	db.AutoMigrate(&delivery.Delivery{})
-	db.AutoMigrate(&cart.Cart{})
+	db.AutoMigrate(&payment.Payment{})
+	db.AutoMigrate(&product.Product{})
 	db.AutoMigrate(&user.User{})
 }
 
@@ -116,4 +119,16 @@ func routeCart(db *gorm.DB, v *gin.RouterGroup) {
 	v.POST("/cart/create", cartController.CreateCart)
 	v.PUT("/cart/update/:id", cartController.UpdateCart)
 	v.DELETE("/cart/delete/:id", cartController.DeleteCart)
+}
+
+func routePayment(db *gorm.DB, v *gin.RouterGroup) {
+	paymentRepository := payment.NewRepository(db)
+	paymentService := payment.NewService(paymentRepository)
+	paymentController := payment.NewController(paymentService)
+
+	v.GET("/payments", paymentController.GetPayments)
+	v.GET("/payment/:id", paymentController.GetPayment)
+	v.POST("/payment/create", paymentController.CreatePayment)
+	v.PUT("/payment/update/:id", paymentController.UpdatePayment)
+	v.DELETE("/payment/delete/:id", paymentController.DeletePayment)
 }
