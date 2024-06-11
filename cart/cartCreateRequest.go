@@ -5,6 +5,6 @@ type CartCreateRequest struct {
 	ProductID  int    `json:"product_id" binding:"required"`
 	PaymentID  int    `json:"payment_id" binding:"required"`
 	Quantity   int    `json:"quantity" binding:"required"`
-	TotalPrice string `json:"total_price" binding:"required"`
+	TotalPrice int    `json:"total_price" binding:"required"`
 	IsActived  string `json:"isActived" binding:"required"`
 }
