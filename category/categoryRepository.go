@@ -23,9 +23,9 @@ func NewRepository(db *gorm.DB) *repository {
 }
 
 func (r *repository) FindAll() ([]Category, error) {
-	var categorys []Category
-	err := r.db.Find(&categorys).Error
-	return categorys, err
+	var categories []Category
+	err := r.db.Find(&categories).Error
+	return categories, err
 }
 
 func (r *repository) FindCategoryByID(ID int) (Category, error) {

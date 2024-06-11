@@ -1,4 +1,4 @@
-package category
+package delivery
 
 import (
 	"fmt"
@@ -10,15 +10,15 @@ import (
 )
 
 type controller struct {
-	categoryService CategoryService
+	deliveryService DeliveryService
 }
 
-func NewController(categoryService CategoryService) *controller {
-	return &controller{categoryService}
+func NewController(deliveryService DeliveryService) *controller {
+	return &controller{deliveryService}
 }
 
-func (cn *controller) GetCategories(c *gin.Context) {
-	categories, err := cn.categoryService.FindAll()
+func (cn *controller) GetDeliveries(c *gin.Context) {
+	deliveries, err := cn.deliveryService.FindAll()
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -27,35 +27,35 @@ func (cn *controller) GetCategories(c *gin.Context) {
 		return
 	}
 
-	var categoriesResponse []CategoryResponse
+	var deliveriesResponse []DeliveryResponse
 
-	for _, category := range categories {
-		categoryResponse := convertToCategoryResponse(category)
+	for _, delivery := range deliveries {
+		deliveryResponse := convertToDeliveryResponse(delivery)
 
-		categoriesResponse = append(categoriesResponse, categoryResponse)
+		deliveriesResponse = append(deliveriesResponse, deliveryResponse)
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": categoriesResponse,
+		"data": deliveriesResponse,
 	})
 }
 
-func (cn *controller) GetCategory(c *gin.Context) {
+func (cn *controller) GetDelivery(c *gin.Context) {
 	idString := c.Param("id")
 	id, err := strconv.Atoi(idString)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid category ID",
+			"errors": "Invalid delivery ID",
 		})
 		return
 	}
 
-	category, err := cn.categoryService.FindCategoryByID(id)
+	delivery, err := cn.deliveryService.FindDeliveryByID(id)
 
 	if err != nil {
 		statusCode := http.StatusInternalServerError
-		if err.Error() == "Category not found" {
+		if err.Error() == "delivery not found" {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
@@ -65,14 +65,14 @@ func (cn *controller) GetCategory(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToCategoryResponse(category),
+		"data": convertToDeliveryResponse(delivery),
 	})
 }
 
-func (cn *controller) CreateCategory(c *gin.Context) {
-	var categoryRequest CategoryCreateRequest
+func (cn *controller) CreateDelivery(c *gin.Context) {
+	var deliveryRequest DeliveryCreateRequest
 
-	err := c.ShouldBindJSON(&categoryRequest)
+	err := c.ShouldBindJSON(&deliveryRequest)
 
 	if err != nil {
 		errorMessages := []string{}
@@ -86,7 +86,7 @@ func (cn *controller) CreateCategory(c *gin.Context) {
 		return
 	}
 
-	category, err := cn.categoryService.CreateCategory(categoryRequest)
+	delivery, err := cn.deliveryService.CreateDelivery(deliveryRequest)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -96,14 +96,14 @@ func (cn *controller) CreateCategory(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToCategoryResponse(category),
+		"data": convertToDeliveryResponse(delivery),
 	})
 }
 
-func (cn *controller) UpdateCategory(c *gin.Context) {
-	var categoryRequest CategoryUpdateRequest
+func (cn *controller) UpdateDelivery(c *gin.Context) {
+	var deliveryRequest DeliveryUpdateRequest
 
-	err := c.ShouldBindJSON(&categoryRequest)
+	err := c.ShouldBindJSON(&deliveryRequest)
 
 	if err != nil {
 		errorMessages := []string{}
@@ -122,16 +122,16 @@ func (cn *controller) UpdateCategory(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid category ID",
+			"errors": "Invalid delivery ID",
 		})
 		return
 	}
 
-	category, err := cn.categoryService.UpdateCategory(id, categoryRequest)
+	delivery, err := cn.deliveryService.UpdateDelivery(id, deliveryRequest)
 
 	if err != nil {
 		statusCode := http.StatusInternalServerError
-		if err.Error() == "Category not found" {
+		if err.Error() == "Delivery not found" {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
@@ -141,26 +141,26 @@ func (cn *controller) UpdateCategory(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToCategoryResponse(category),
+		"data": convertToDeliveryResponse(delivery),
 	})
 }
 
-func (ch *controller) DeleteCategory(c *gin.Context) {
+func (ch *controller) DeleteDelivery(c *gin.Context) {
 	idString := c.Param("id")
 	id, err := strconv.Atoi(idString)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid category ID",
+			"errors": "Invalid delivery ID",
 		})
 		return
 	}
 
-	category, err := ch.categoryService.DeleteCategory(id)
+	delivery, err := ch.deliveryService.DeleteDelivery(id)
 
 	if err != nil {
 		statusCode := http.StatusInternalServerError
-		if err.Error() == "Category not found" {
+		if err.Error() == "Delivery not found" {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
@@ -170,13 +170,14 @@ func (ch *controller) DeleteCategory(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToCategoryResponse(category),
+		"data": convertToDeliveryResponse(delivery),
 	})
 }
 
-func convertToCategoryResponse(category Category) CategoryResponse {
-	return CategoryResponse{
-		ID:   category.ID,
-		Name: category.Name,
+func convertToDeliveryResponse(delivery Delivery) DeliveryResponse {
+	return DeliveryResponse{
+		ID:       delivery.ID,
+		Name:     delivery.Name,
+		Whatsapp: delivery.Whatsapp,
 	}
 }

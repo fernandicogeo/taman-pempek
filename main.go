@@ -4,6 +4,7 @@ import (
 	"log"
 	"taman-pempek/bank"
 	"taman-pempek/category"
+	"taman-pempek/delivery"
 	"taman-pempek/product"
 	"taman-pempek/transaction"
 	"taman-pempek/user"
@@ -30,6 +31,7 @@ func main() {
 	routeProduct(db, v1)
 	routeBank(db, v1)
 	routeCategory(db, v1)
+	routeDelivery(db, v1)
 
 	router.Run(":8888") // port
 }
@@ -38,6 +40,7 @@ func migration(db *gorm.DB) {
 	db.AutoMigrate(&bank.Bank{})
 	db.AutoMigrate(&product.Product{})
 	db.AutoMigrate(&category.Category{})
+	db.AutoMigrate(&delivery.Delivery{})
 	db.AutoMigrate(&transaction.Transaction{})
 	db.AutoMigrate(&user.User{})
 }
@@ -83,9 +86,21 @@ func routeCategory(db *gorm.DB, v *gin.RouterGroup) {
 	categoryService := category.NewService(categoryRepository)
 	categoryController := category.NewController(categoryService)
 
-	v.GET("/categories", categoryController.GetCategorys)
+	v.GET("/categories", categoryController.GetCategories)
 	v.GET("/category/:id", categoryController.GetCategory)
 	v.POST("/category/create", categoryController.CreateCategory)
 	v.PUT("/category/update/:id", categoryController.UpdateCategory)
 	v.DELETE("/category/delete/:id", categoryController.DeleteCategory)
+}
+
+func routeDelivery(db *gorm.DB, v *gin.RouterGroup) {
+	deliveryRepository := delivery.NewRepository(db)
+	deliveryService := delivery.NewService(deliveryRepository)
+	deliveryController := delivery.NewController(deliveryService)
+
+	v.GET("/deliveries", deliveryController.GetDeliveries)
+	v.GET("/delivery/:id", deliveryController.GetDelivery)
+	v.POST("/delivery/create", deliveryController.CreateDelivery)
+	v.PUT("/delivery/update/:id", deliveryController.UpdateDelivery)
+	v.DELETE("/delivery/delete/:id", deliveryController.DeleteDelivery)
 }
