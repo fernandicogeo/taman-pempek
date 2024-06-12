@@ -86,6 +86,16 @@ func (cn *controller) CreatePayment(c *gin.Context) {
 		return
 	}
 
+	userID, errorID := c.Get("UserID")
+
+	if !errorID {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": errorID,
+		})
+	}
+
+	paymentRequest.UserID = int(userID.(uint64))
+
 	payment, err := cn.paymentService.CreatePayment(paymentRequest)
 
 	if err != nil {

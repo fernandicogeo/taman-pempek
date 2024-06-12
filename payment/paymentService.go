@@ -56,13 +56,13 @@ func (s *service) UpdatePayment(ID int, paymentRequest PaymentUpdateRequest) (Pa
 		return Payment{}, err
 	}
 
-	if paymentRequest.BankID != 0 {
+	if paymentRequest.BankID != "" {
 		payment.BankID = paymentRequest.BankID
 	}
-	if paymentRequest.DeliveryID != 0 {
+	if paymentRequest.DeliveryID != "" {
 		payment.DeliveryID = paymentRequest.DeliveryID
 	}
-	if paymentRequest.TotalPrice != 0 {
+	if paymentRequest.TotalPrice != "" {
 		payment.TotalPrice = paymentRequest.TotalPrice
 	}
 	if paymentRequest.PaymentStatus != "" {
