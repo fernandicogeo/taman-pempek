@@ -61,12 +61,24 @@ func (s *service) UpdateUser(ID int, userRequest UserUpdateRequest) (User, error
 		return User{}, err
 	}
 
-	user.Name = userRequest.Name
-	user.Email = userRequest.Email
-	user.Password = userRequest.Password
-	user.Whatsapp = userRequest.Whatsapp
-	user.Gender = userRequest.Gender
-	user.Role = userRequest.Role
+	if userRequest.Name != "" {
+		user.Name = userRequest.Name
+	}
+	if userRequest.Email != "" {
+		user.Email = userRequest.Email
+	}
+	if userRequest.Password != "" {
+		user.Password = userRequest.Password
+	}
+	if userRequest.Whatsapp != "" {
+		user.Whatsapp = userRequest.Whatsapp
+	}
+	if userRequest.Gender != "" {
+		user.Gender = userRequest.Gender
+	}
+	if userRequest.Role != "" {
+		user.Role = userRequest.Role
+	}
 
 	return s.userRepository.UpdateUser(user)
 }

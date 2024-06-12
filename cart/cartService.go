@@ -56,11 +56,21 @@ func (s *service) UpdateCart(ID int, cartRequest CartUpdateRequest) (Cart, error
 		return Cart{}, err
 	}
 
-	cart.ProductID = cartRequest.ProductID
-	cart.PaymentID = cartRequest.PaymentID
-	cart.Quantity = cartRequest.Quantity
-	cart.TotalPrice = cartRequest.TotalPrice
-	cart.IsActived = cartRequest.IsActived
+	if cartRequest.ProductID != 0 {
+		cart.ProductID = cartRequest.ProductID
+	}
+	if cartRequest.PaymentID != 0 {
+		cart.PaymentID = cartRequest.PaymentID
+	}
+	if cartRequest.Quantity != 0 {
+		cart.Quantity = cartRequest.Quantity
+	}
+	if cartRequest.TotalPrice != 0 {
+		cart.TotalPrice = cartRequest.TotalPrice
+	}
+	if cartRequest.IsActived != "" {
+		cart.IsActived = cartRequest.IsActived
+	}
 
 	return s.cartRepository.UpdateCart(cart)
 }

@@ -1,9 +1,9 @@
 package payment
 
 type PaymentUpdateRequest struct {
-	BankID         int    `json:"bank_id"`
-	DeliveryID     int    `json:"delivery_id"`
-	TotalPrice     int    `json:"total_price"`
-	PaymentStatus  string `json:"payment_status"`
-	DeliveryStatus string `json:"delivery_status"`
+	BankID         int    `json:"bank_id,omitempty"`
+	DeliveryID     int    `json:"delivery_id,omitempty"`
+	TotalPrice     int    `json:"total_price,omitempty"`
+	PaymentStatus  string `json:"payment_status,omitempty"`
+	DeliveryStatus string `json:"delivery_status,omitempty"`
 }

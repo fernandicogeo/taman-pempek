@@ -56,11 +56,21 @@ func (s *service) UpdatePayment(ID int, paymentRequest PaymentUpdateRequest) (Pa
 		return Payment{}, err
 	}
 
-	payment.BankID = paymentRequest.BankID
-	payment.DeliveryID = paymentRequest.DeliveryID
-	payment.TotalPrice = paymentRequest.TotalPrice
-	payment.PaymentStatus = paymentRequest.PaymentStatus
-	payment.DeliveryStatus = paymentRequest.DeliveryStatus
+	if paymentRequest.BankID != 0 {
+		payment.BankID = paymentRequest.BankID
+	}
+	if paymentRequest.DeliveryID != 0 {
+		payment.DeliveryID = paymentRequest.DeliveryID
+	}
+	if paymentRequest.TotalPrice != 0 {
+		payment.TotalPrice = paymentRequest.TotalPrice
+	}
+	if paymentRequest.PaymentStatus != "" {
+		payment.PaymentStatus = paymentRequest.PaymentStatus
+	}
+	if paymentRequest.DeliveryStatus != "" {
+		payment.DeliveryStatus = paymentRequest.DeliveryStatus
+	}
 
 	return s.paymentRepository.UpdatePayment(payment)
 }

@@ -1,10 +1,10 @@
 package user
 
 type UserUpdateRequest struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
-	Whatsapp string `json:"whatsapp"`
-	Gender   string `json:"gender"`
-	Role     string `json:"role"`
+	Name     string `json:"name,omitempty"`
+	Email    string `json:"email,omitempty"`
+	Password string `json:"password,omitempty"`
+	Whatsapp string `json:"whatsapp,omitempty"`
+	Gender   string `json:"gender,omitempty"`
+	Role     string `json:"role,omitempty"`
 }

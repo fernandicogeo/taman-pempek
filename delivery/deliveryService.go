@@ -52,7 +52,12 @@ func (s *service) UpdateDelivery(ID int, deliveryRequest DeliveryUpdateRequest) 
 		return Delivery{}, err
 	}
 
-	delivery.Name = deliveryRequest.Name
+	if deliveryRequest.Name != "" {
+		delivery.Name = deliveryRequest.Name
+	}
+	if deliveryRequest.Whatsapp != "" {
+		delivery.Whatsapp = deliveryRequest.Whatsapp
+	}
 
 	return s.deliveryRepository.UpdateDelivery(delivery)
 }

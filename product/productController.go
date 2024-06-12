@@ -132,7 +132,7 @@ func (cn *controller) CreateProduct(c *gin.Context) {
 func (cn *controller) UpdateProduct(c *gin.Context) {
 	var productRequest ProductUpdateRequest
 
-	err := c.ShouldBindJSON(&productRequest)
+	err := c.ShouldBind(&productRequest)
 
 	if err != nil {
 		errorMessages := []string{}
@@ -144,6 +144,25 @@ func (cn *controller) UpdateProduct(c *gin.Context) {
 			"errors": errorMessages,
 		})
 		return
+	}
+
+	if productRequest.Image != nil {
+		if err := os.MkdirAll("/public/product/image", 0755); err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"errors": err.Error(),
+			})
+			return
+		}
+
+		// rename file
+		ext := filepath.Ext(productRequest.Image.Filename)
+		newFileName := uuid.New().String() + ext
+
+		// save file
+		dst := filepath.Join("public/product/image", filepath.Base(newFileName))
+		c.SaveUploadedFile(productRequest.Image, dst)
+
+		productRequest.Image.Filename = fmt.Sprintf("%s/public/product/image/%s", c.Request.Host, newFileName)
 	}
 
 	idString := c.Param("id")

@@ -57,12 +57,24 @@ func (s *service) UpdateProduct(ID int, productRequest ProductUpdateRequest) (Pr
 		return Product{}, err
 	}
 
-	product.CategoryID = productRequest.CategoryID
-	product.Name = productRequest.Name
-	product.Image = productRequest.Image.Filename
-	product.Description = productRequest.Description
-	product.Price = productRequest.Price
-	product.Stock = productRequest.Stock
+	if productRequest.CategoryID != 0 {
+		product.CategoryID = productRequest.CategoryID
+	}
+	if productRequest.Name != "" {
+		product.Name = productRequest.Name
+	}
+	if productRequest.Image != nil {
+		product.Image = productRequest.Image.Filename
+	}
+	if productRequest.Description != "" {
+		product.Description = productRequest.Description
+	}
+	if productRequest.Price != 0 {
+		product.Price = productRequest.Price
+	}
+	if productRequest.Stock != 0 {
+		product.Stock = productRequest.Stock
+	}
 
 	return s.productRepository.UpdateProduct(product)
 }

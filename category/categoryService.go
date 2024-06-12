@@ -51,7 +51,9 @@ func (s *service) UpdateCategory(ID int, categoryRequest CategoryUpdateRequest) 
 		return Category{}, err
 	}
 
-	category.Name = categoryRequest.Name
+	if categoryRequest.Name != "" {
+		category.Name = categoryRequest.Name
+	}
 
 	return s.categoryRepository.UpdateCategory(category)
 }

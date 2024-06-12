@@ -53,9 +53,15 @@ func (s *service) UpdateBank(ID int, bankRequest BankUpdateRequest) (Bank, error
 		return Bank{}, err
 	}
 
-	bank.Type = bankRequest.Type
-	bank.Name = bankRequest.Name
-	bank.Number = bankRequest.Number
+	if bankRequest.Type != "" {
+		bank.Type = bankRequest.Type
+	}
+	if bankRequest.Name != "" {
+		bank.Name = bankRequest.Name
+	}
+	if bankRequest.Number != "" {
+		bank.Number = bankRequest.Number
+	}
 
 	return s.bankRepository.UpdateBank(bank)
 }
