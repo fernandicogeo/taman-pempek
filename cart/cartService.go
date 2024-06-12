@@ -56,16 +56,16 @@ func (s *service) UpdateCart(ID int, cartRequest CartUpdateRequest) (Cart, error
 		return Cart{}, err
 	}
 
-	if cartRequest.ProductID != 0 {
+	if cartRequest.ProductID != "" {
 		cart.ProductID = cartRequest.ProductID
 	}
-	if cartRequest.PaymentID != 0 {
+	if cartRequest.PaymentID != "" {
 		cart.PaymentID = cartRequest.PaymentID
 	}
-	if cartRequest.Quantity != 0 {
+	if cartRequest.Quantity != "" {
 		cart.Quantity = cartRequest.Quantity
 	}
-	if cartRequest.TotalPrice != 0 {
+	if cartRequest.TotalPrice != "" {
 		cart.TotalPrice = cartRequest.TotalPrice
 	}
 	if cartRequest.IsActived != "" {
