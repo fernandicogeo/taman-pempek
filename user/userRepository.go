@@ -8,7 +8,8 @@ import (
 
 type UserRepository interface {
 	FindAll() ([]User, error)
-	FindUserByID(ID int) (User, error)
+	FindUserByID(ID any) (User, error)
+	FindUserByEmail(email string) (User, error)
 	CreateUser(user User) (User, error)
 	UpdateUser(user User) (User, error)
 	DeleteUser(user User) (User, error)
@@ -28,9 +29,18 @@ func (r *repository) FindAll() ([]User, error) {
 	return users, err
 }
 
-func (r *repository) FindUserByID(ID int) (User, error) {
+func (r *repository) FindUserByID(ID any) (User, error) {
 	var user User
 	err := r.db.First(&user, ID).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return User{}, errors.New("User not found")
+	}
+	return user, err
+}
+
+func (r *repository) FindUserByEmail(email string) (User, error) {
+	var user User
+	err := r.db.Where("email = ?", email).First(&user).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return User{}, errors.New("User not found")
 	}

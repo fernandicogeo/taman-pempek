@@ -3,10 +3,13 @@ package user
 import (
 	"fmt"
 	"net/http"
+	"os"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/golang-jwt/jwt/v5"
 )
 
 type controller struct {
@@ -171,6 +174,48 @@ func (ch *controller) DeleteUser(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"data": convertToUserResponse(user),
+	})
+}
+
+func (ch *controller) Login(c *gin.Context) {
+	var request LoginRequest
+
+	if c.Bind(&request) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": "Failed to read request",
+		})
+		return
+	}
+
+	user, _ := ch.userService.FindUserByEmail(request.Email)
+
+	if user.ID == 0 || user.Password != request.Password {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": "Invalid email or password",
+		})
+		return
+	}
+
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"foo": user.ID,
+		"exp": time.Now().Add(time.Hour * 24 * 7).Unix(),
+	})
+
+	tokenString, err := token.SignedString([]byte(os.Getenv("SECRET")))
+	fmt.Println(tokenString)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": "Failed to create token",
+		})
+		return
+	}
+
+	c.SetSameSite(http.SameSiteLaxMode)
+	c.SetCookie("Authorization", tokenString, 3600*24*7, "", "", false, true)
+
+	c.JSON(http.StatusOK, gin.H{
+		"token": tokenString,
 	})
 }
 

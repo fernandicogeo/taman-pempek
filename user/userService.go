@@ -8,7 +8,8 @@ import (
 
 type UserService interface {
 	FindAll() ([]User, error)
-	FindUserByID(ID int) (User, error)
+	FindUserByID(ID any) (User, error)
+	FindUserByEmail(email string) (User, error)
 	CreateUser(user UserCreateRequest) (User, error)
 	UpdateUser(ID int, user UserUpdateRequest) (User, error)
 	DeleteUser(ID int) (User, error)
@@ -26,8 +27,12 @@ func (s *service) FindAll() ([]User, error) {
 	return s.userRepository.FindAll()
 }
 
-func (s *service) FindUserByID(ID int) (User, error) {
+func (s *service) FindUserByID(ID any) (User, error) {
 	return s.userRepository.FindUserByID(ID)
+}
+
+func (s *service) FindUserByEmail(email string) (User, error) {
+	return s.userRepository.FindUserByEmail(email)
 }
 
 func (s *service) CreateUser(userRequest UserCreateRequest) (User, error) {
