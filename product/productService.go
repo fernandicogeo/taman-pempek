@@ -35,7 +35,7 @@ func (s *service) CreateProduct(productRequest ProductCreateRequest) (Product, e
 		UserID:      productRequest.UserID,
 		CategoryID:  productRequest.CategoryID,
 		Name:        productRequest.Name,
-		Image:       productRequest.Image,
+		Image:       productRequest.Image.Filename,
 		Description: productRequest.Description,
 		Price:       productRequest.Price,
 		Stock:       productRequest.Stock,
@@ -59,7 +59,7 @@ func (s *service) UpdateProduct(ID int, productRequest ProductUpdateRequest) (Pr
 
 	product.CategoryID = productRequest.CategoryID
 	product.Name = productRequest.Name
-	product.Image = productRequest.Image
+	product.Image = productRequest.Image.Filename
 	product.Description = productRequest.Description
 	product.Price = productRequest.Price
 	product.Stock = productRequest.Stock

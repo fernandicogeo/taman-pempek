@@ -1,10 +1,12 @@
 package product
 
+import "mime/multipart"
+
 type ProductUpdateRequest struct {
-	CategoryID  int    `json:"category_id"`
-	Name        string `json:"name"`
-	Image       string `json:"image"`
-	Description string `json:"description"`
-	Price       int    `json:"price"`
-	Stock       int    `json:"stock"`
+	CategoryID  int                  `form:"category_id"`
+	Name        string               `form:"name"`
+	Image       multipart.FileHeader `form:"image"`
+	Description string               `form:"description"`
+	Price       int                  `form:"price"`
+	Stock       int                  `form:"stock"`
 }

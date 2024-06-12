@@ -63,7 +63,7 @@ func routeUser(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)
 
 	v.GET("/users", requireAuth, userController.GetUsers)
 	v.GET("/user/:id", requireAuth, userController.GetUser)
-	v.POST("/user/register", requireAuth, userController.CreateUser)
+	v.POST("/user/register", userController.CreateUser)
 	v.PUT("/user/update/:id", requireAuth, userController.UpdateUser)
 	v.DELETE("/user/delete/:id", requireAuth, userController.DeleteUser)
 

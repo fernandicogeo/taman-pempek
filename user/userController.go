@@ -221,6 +221,9 @@ func (ch *controller) Login(c *gin.Context) {
 
 func (cn *controller) Logout(c *gin.Context) {
 	c.SetCookie("Authorization", "", -1, "", "", false, true)
+	c.Set("UserID", nil)
+	c.Set("UserName", nil)
+	c.Set("UserEmail", nil)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "Logged out successfully",

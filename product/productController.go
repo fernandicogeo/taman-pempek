@@ -3,10 +3,13 @@ package product
 import (
 	"fmt"
 	"net/http"
+	"os"
+	"path/filepath"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/google/uuid"
 )
 
 type controller struct {
@@ -72,7 +75,7 @@ func (cn *controller) GetProduct(c *gin.Context) {
 func (cn *controller) CreateProduct(c *gin.Context) {
 	var productRequest ProductCreateRequest
 
-	err := c.ShouldBindJSON(&productRequest)
+	err := c.ShouldBind(&productRequest)
 
 	if err != nil {
 		errorMessages := []string{}
@@ -86,6 +89,32 @@ func (cn *controller) CreateProduct(c *gin.Context) {
 		return
 	}
 
+	if err := os.MkdirAll("/public/product/image", 0755); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": err.Error(),
+		})
+		return
+	}
+
+	userID, errorID := c.Get("UserID")
+
+	if !errorID {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"errors": errorID,
+		})
+	}
+
+	productRequest.UserID = int(userID.(uint64))
+
+	// rename file
+	ext := filepath.Ext(productRequest.Image.Filename)
+	newFileName := uuid.New().String() + ext
+
+	// save file
+	dst := filepath.Join("public/product/image", filepath.Base(newFileName))
+	c.SaveUploadedFile(&productRequest.Image, dst)
+
+	productRequest.Image.Filename = fmt.Sprintf("%s/public/product/image/%s", c.Request.Host, newFileName)
 	product, err := cn.productService.CreateProduct(productRequest)
 
 	if err != nil {

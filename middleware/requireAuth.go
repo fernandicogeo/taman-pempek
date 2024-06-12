@@ -50,7 +50,7 @@ func (m *middleware) RequireAuth(c *gin.Context) {
 				"errors": "Login first!",
 			})
 		}
-		user, err := m.userService.FindUserByID(claims["sub"])
+		user, err := m.userService.FindUserByID(claims["foo"])
 
 		if user.ID == 0 || err != nil {
 			c.AbortWithStatus(http.StatusUnauthorized)
@@ -59,11 +59,11 @@ func (m *middleware) RequireAuth(c *gin.Context) {
 			})
 		}
 
-		c.Set("user", user)
+		c.Set("UserID", user.ID)
+		c.Set("UserName", user.Name)
+		c.Set("UserEmail", user.Email)
 
 		c.Next()
-
-		fmt.Println(claims["foo"], claims["nbf"])
 	} else {
 		c.AbortWithStatus(http.StatusUnauthorized)
 		c.JSON(http.StatusBadRequest, gin.H{
