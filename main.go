@@ -68,6 +68,7 @@ func routeUser(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)
 	v.DELETE("/user/delete/:id", requireAuth, userController.DeleteUser)
 
 	v.POST("/login", userController.Login)
+	v.POST("/logout", requireAuth, userController.Logout)
 }
 
 func routeProduct(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)) {
