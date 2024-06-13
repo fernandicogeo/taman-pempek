@@ -2,7 +2,6 @@ package main
 
 import (
 	"log"
-	"os"
 	"taman-pempek/bank"
 	"taman-pempek/cart"
 	"taman-pempek/category"
@@ -13,25 +12,16 @@ import (
 	"taman-pempek/user"
 
 	"github.com/gin-gonic/gin"
-	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
 
-func goDotEnvVariable(key string) string {
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatalf("Error loading .env file")
-	}
-	return os.Getenv(key)
-}
-
 func main() {
-	dbUser := goDotEnvVariable("MYSQLUSER")
-	dbPassword := goDotEnvVariable("MYSQLPASSWORD")
-	dbHost := goDotEnvVariable("MYSQLHOST")
-	dbPort := goDotEnvVariable("MYSQLPORT")
-	dbName := goDotEnvVariable("MYSQLDATABASE")
+	dbUser := "root"
+	dbPassword := "XirqZhJrGUfpgNtslRiycKrlDVOAosdF"
+	dbHost := "roundhouse.proxy.rlwy.net"
+	dbPort := "34252"
+	dbName := "railway"
 
 	dsn := dbUser + ":" + dbPassword + "@tcp(" + dbHost + ":" + dbPort + ")/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
