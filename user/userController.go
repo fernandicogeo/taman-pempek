@@ -257,7 +257,7 @@ func (ch *controller) Login(c *gin.Context) {
 		"error": false,
 		"msg":   "Success!",
 		"token": tokenString,
-		"data":  user,
+		"data":  convertToUserResponse(user),
 	})
 }
 
