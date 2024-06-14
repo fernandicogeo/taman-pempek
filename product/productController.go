@@ -25,7 +25,9 @@ func (cn *controller) GetProducts(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err,
+			"error": true,
+			"data":  nil,
+			"msg":   err,
 		})
 		return
 	}
@@ -39,7 +41,9 @@ func (cn *controller) GetProducts(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": productsResponse,
+		"error": false,
+		"msg":   "Success!",
+		"data":  productsResponse,
 	})
 }
 
@@ -49,7 +53,9 @@ func (cn *controller) GetProduct(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid product ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid product ID",
 		})
 		return
 	}
@@ -62,13 +68,17 @@ func (cn *controller) GetProduct(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToProductResponse(product),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToProductResponse(product),
 	})
 }
 
@@ -84,14 +94,18 @@ func (cn *controller) CreateProduct(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
 
 	if err := os.MkdirAll("/public/product/image", 0755); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
@@ -100,7 +114,9 @@ func (cn *controller) CreateProduct(c *gin.Context) {
 
 	if !errorID {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorID,
+			"error": true,
+			"data":  nil,
+			"msg":   errorID,
 		})
 	}
 
@@ -119,13 +135,17 @@ func (cn *controller) CreateProduct(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToProductResponse(product),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToProductResponse(product),
 	})
 }
 
@@ -141,7 +161,9 @@ func (cn *controller) UpdateProduct(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
@@ -149,7 +171,9 @@ func (cn *controller) UpdateProduct(c *gin.Context) {
 	if productRequest.Image != nil {
 		if err := os.MkdirAll("/public/product/image", 0755); err != nil {
 			c.JSON(http.StatusBadRequest, gin.H{
-				"errors": err.Error(),
+				"error": true,
+				"data":  nil,
+				"msg":   err.Error(),
 			})
 			return
 		}
@@ -170,7 +194,9 @@ func (cn *controller) UpdateProduct(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid product ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid product ID",
 		})
 		return
 	}
@@ -183,13 +209,17 @@ func (cn *controller) UpdateProduct(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToProductResponse(product),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToProductResponse(product),
 	})
 }
 
@@ -199,7 +229,9 @@ func (ch *controller) DeleteProduct(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid product ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid product ID",
 		})
 		return
 	}
@@ -212,13 +244,17 @@ func (ch *controller) DeleteProduct(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToProductResponse(product),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToProductResponse(product),
 	})
 }
 

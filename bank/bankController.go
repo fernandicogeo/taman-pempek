@@ -22,7 +22,9 @@ func (cn *controller) GetBanks(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err,
+			"error": true,
+			"data":  nil,
+			"msg":   err,
 		})
 		return
 	}
@@ -36,7 +38,9 @@ func (cn *controller) GetBanks(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": banksResponse,
+		"error": false,
+		"msg":   "Success!",
+		"data":  banksResponse,
 	})
 }
 
@@ -46,7 +50,9 @@ func (cn *controller) GetBank(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid bank ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid bank ID",
 		})
 		return
 	}
@@ -59,13 +65,17 @@ func (cn *controller) GetBank(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToBankResponse(bank),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToBankResponse(bank),
 	})
 }
 
@@ -81,7 +91,9 @@ func (cn *controller) CreateBank(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
@@ -90,13 +102,17 @@ func (cn *controller) CreateBank(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToBankResponse(bank),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToBankResponse(bank),
 	})
 }
 
@@ -112,7 +128,9 @@ func (cn *controller) UpdateBank(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
@@ -122,7 +140,9 @@ func (cn *controller) UpdateBank(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid bank ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid bank ID",
 		})
 		return
 	}
@@ -135,13 +155,17 @@ func (cn *controller) UpdateBank(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToBankResponse(bank),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToBankResponse(bank),
 	})
 }
 
@@ -151,7 +175,9 @@ func (ch *controller) DeleteBank(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid bank ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid bank ID",
 		})
 		return
 	}
@@ -164,13 +190,17 @@ func (ch *controller) DeleteBank(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToBankResponse(bank),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToBankResponse(bank),
 	})
 }
 

@@ -22,7 +22,9 @@ func (cn *controller) GetDeliveries(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err,
+			"error": true,
+			"data":  nil,
+			"msg":   err,
 		})
 		return
 	}
@@ -36,7 +38,9 @@ func (cn *controller) GetDeliveries(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": deliveriesResponse,
+		"error": false,
+		"msg":   "Success!",
+		"data":  deliveriesResponse,
 	})
 }
 
@@ -46,7 +50,9 @@ func (cn *controller) GetDelivery(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid delivery ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid delivery ID",
 		})
 		return
 	}
@@ -59,13 +65,17 @@ func (cn *controller) GetDelivery(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToDeliveryResponse(delivery),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToDeliveryResponse(delivery),
 	})
 }
 
@@ -81,7 +91,9 @@ func (cn *controller) CreateDelivery(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
@@ -90,13 +102,17 @@ func (cn *controller) CreateDelivery(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToDeliveryResponse(delivery),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToDeliveryResponse(delivery),
 	})
 }
 
@@ -112,7 +128,9 @@ func (cn *controller) UpdateDelivery(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
@@ -122,7 +140,9 @@ func (cn *controller) UpdateDelivery(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid delivery ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid delivery ID",
 		})
 		return
 	}
@@ -135,13 +155,17 @@ func (cn *controller) UpdateDelivery(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToDeliveryResponse(delivery),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToDeliveryResponse(delivery),
 	})
 }
 
@@ -151,7 +175,9 @@ func (ch *controller) DeleteDelivery(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid delivery ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid delivery ID",
 		})
 		return
 	}
@@ -164,13 +190,17 @@ func (ch *controller) DeleteDelivery(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToDeliveryResponse(delivery),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToDeliveryResponse(delivery),
 	})
 }
 

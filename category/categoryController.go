@@ -22,7 +22,9 @@ func (cn *controller) GetCategories(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err,
+			"error": true,
+			"data":  nil,
+			"msg":   err,
 		})
 		return
 	}
@@ -36,7 +38,9 @@ func (cn *controller) GetCategories(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": categoriesResponse,
+		"error": false,
+		"msg":   "Success!",
+		"data":  categoriesResponse,
 	})
 }
 
@@ -46,7 +50,9 @@ func (cn *controller) GetCategory(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid category ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid category ID",
 		})
 		return
 	}
@@ -59,13 +65,17 @@ func (cn *controller) GetCategory(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToCategoryResponse(category),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToCategoryResponse(category),
 	})
 }
 
@@ -81,7 +91,9 @@ func (cn *controller) CreateCategory(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
@@ -90,13 +102,17 @@ func (cn *controller) CreateCategory(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToCategoryResponse(category),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToCategoryResponse(category),
 	})
 }
 
@@ -112,7 +128,9 @@ func (cn *controller) UpdateCategory(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
@@ -122,7 +140,9 @@ func (cn *controller) UpdateCategory(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid category ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid category ID",
 		})
 		return
 	}
@@ -135,13 +155,17 @@ func (cn *controller) UpdateCategory(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToCategoryResponse(category),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToCategoryResponse(category),
 	})
 }
 
@@ -151,7 +175,9 @@ func (ch *controller) DeleteCategory(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid category ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid category ID",
 		})
 		return
 	}
@@ -164,13 +190,17 @@ func (ch *controller) DeleteCategory(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToCategoryResponse(category),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToCategoryResponse(category),
 	})
 }
 

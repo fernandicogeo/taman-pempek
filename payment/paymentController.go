@@ -22,7 +22,9 @@ func (cn *controller) GetPayments(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err,
+			"error": true,
+			"data":  nil,
+			"msg":   err,
 		})
 		return
 	}
@@ -36,7 +38,9 @@ func (cn *controller) GetPayments(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": paymentsResponse,
+		"error": false,
+		"msg":   "Success!",
+		"data":  paymentsResponse,
 	})
 }
 
@@ -46,7 +50,9 @@ func (cn *controller) GetPayment(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid payment ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid payment ID",
 		})
 		return
 	}
@@ -59,13 +65,17 @@ func (cn *controller) GetPayment(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToPaymentResponse(payment),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToPaymentResponse(payment),
 	})
 }
 
@@ -81,7 +91,9 @@ func (cn *controller) CreatePayment(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
@@ -90,7 +102,9 @@ func (cn *controller) CreatePayment(c *gin.Context) {
 
 	if !errorID {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorID,
+			"error": true,
+			"data":  nil,
+			"msg":   errorID,
 		})
 	}
 
@@ -100,13 +114,17 @@ func (cn *controller) CreatePayment(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToPaymentResponse(payment),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToPaymentResponse(payment),
 	})
 }
 
@@ -122,7 +140,9 @@ func (cn *controller) UpdatePayment(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
@@ -132,7 +152,9 @@ func (cn *controller) UpdatePayment(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid payment ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid payment ID",
 		})
 		return
 	}
@@ -145,13 +167,17 @@ func (cn *controller) UpdatePayment(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToPaymentResponse(payment),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToPaymentResponse(payment),
 	})
 }
 
@@ -161,7 +187,9 @@ func (ch *controller) DeletePayment(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid payment ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid payment ID",
 		})
 		return
 	}
@@ -174,13 +202,17 @@ func (ch *controller) DeletePayment(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToPaymentResponse(payment),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToPaymentResponse(payment),
 	})
 }
 

@@ -25,7 +25,9 @@ func (cn *controller) GetUsers(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err,
+			"error": true,
+			"data":  nil,
+			"msg":   err,
 		})
 		return
 	}
@@ -39,7 +41,9 @@ func (cn *controller) GetUsers(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": usersResponse,
+		"error": false,
+		"msg":   "Success!",
+		"data":  usersResponse,
 	})
 }
 
@@ -49,7 +53,9 @@ func (cn *controller) GetUser(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid user ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid user ID",
 		})
 		return
 	}
@@ -62,13 +68,17 @@ func (cn *controller) GetUser(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToUserResponse(user),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToUserResponse(user),
 	})
 }
 
@@ -84,7 +94,9 @@ func (cn *controller) CreateUser(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
@@ -93,13 +105,17 @@ func (cn *controller) CreateUser(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToUserResponse(user),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToUserResponse(user),
 	})
 }
 
@@ -115,7 +131,9 @@ func (cn *controller) UpdateUser(c *gin.Context) {
 			errorMessages = append(errorMessages, errorMessage)
 		}
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": errorMessages,
+			"error": true,
+			"data":  nil,
+			"msg":   errorMessages,
 		})
 		return
 	}
@@ -125,7 +143,9 @@ func (cn *controller) UpdateUser(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid user ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid user ID",
 		})
 		return
 	}
@@ -138,13 +158,17 @@ func (cn *controller) UpdateUser(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToUserResponse(user),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToUserResponse(user),
 	})
 }
 
@@ -154,7 +178,9 @@ func (ch *controller) DeleteUser(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid user ID",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid user ID",
 		})
 		return
 	}
@@ -167,13 +193,17 @@ func (ch *controller) DeleteUser(c *gin.Context) {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
-			"errors": err.Error(),
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"data": convertToUserResponse(user),
+		"error": false,
+		"msg":   "Success!",
+		"data":  convertToUserResponse(user),
 	})
 }
 
@@ -182,7 +212,9 @@ func (ch *controller) Login(c *gin.Context) {
 
 	if c.Bind(&request) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Failed to read request",
+			"error": true,
+			"data":  nil,
+			"msg":   "Failed to read request",
 		})
 		return
 	}
@@ -191,7 +223,9 @@ func (ch *controller) Login(c *gin.Context) {
 
 	if user.ID == 0 || user.Password != request.Password {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Invalid email or password",
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid email or password",
 		})
 		return
 	}
@@ -206,7 +240,9 @@ func (ch *controller) Login(c *gin.Context) {
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Failed to create token",
+			"error": true,
+			"data":  nil,
+			"msg":   "Failed to create token",
 		})
 		return
 	}
@@ -215,7 +251,9 @@ func (ch *controller) Login(c *gin.Context) {
 	c.SetCookie("Authorization", tokenString, 3600*24*7, "", "", false, true)
 
 	c.JSON(http.StatusOK, gin.H{
-		"token": tokenString,
+		"error": false,
+		"msg":   "Success!",
+		"data":  tokenString,
 	})
 }
 
@@ -226,7 +264,8 @@ func (cn *controller) Logout(c *gin.Context) {
 	c.Set("UserEmail", nil)
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "Logged out successfully",
+		"error": false,
+		"msg":   "Logged out successfully",
 	})
 }
 

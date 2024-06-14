@@ -25,7 +25,9 @@ func (m *middleware) RequireAuth(c *gin.Context) {
 	if err != nil {
 		c.AbortWithStatus(http.StatusUnauthorized)
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Login first!",
+			"error": true,
+			"data":  nil,
+			"msg":   "Login first!",
 		})
 	}
 
@@ -36,7 +38,9 @@ func (m *middleware) RequireAuth(c *gin.Context) {
 		if err != nil {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			c.JSON(http.StatusBadRequest, gin.H{
-				"errors": "Login first!",
+				"error": true,
+				"data":  nil,
+				"msg":   "Login first!",
 			})
 		}
 
@@ -47,7 +51,9 @@ func (m *middleware) RequireAuth(c *gin.Context) {
 		if float64(time.Now().Unix()) > claims["exp"].(float64) {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			c.JSON(http.StatusBadRequest, gin.H{
-				"errors": "Login first!",
+				"error": true,
+				"data":  nil,
+				"msg":   "Login first!",
 			})
 		}
 		user, err := m.userService.FindUserByID(claims["foo"])
@@ -55,7 +61,9 @@ func (m *middleware) RequireAuth(c *gin.Context) {
 		if user.ID == 0 || err != nil {
 			c.AbortWithStatus(http.StatusUnauthorized)
 			c.JSON(http.StatusBadRequest, gin.H{
-				"errors": "Login first!",
+				"error": true,
+				"data":  nil,
+				"msg":   "Login first!",
 			})
 		}
 
@@ -67,7 +75,9 @@ func (m *middleware) RequireAuth(c *gin.Context) {
 	} else {
 		c.AbortWithStatus(http.StatusUnauthorized)
 		c.JSON(http.StatusBadRequest, gin.H{
-			"errors": "Login first!",
+			"error": true,
+			"data":  nil,
+			"msg":   "Login first!",
 		})
 	}
 }
