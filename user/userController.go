@@ -214,6 +214,7 @@ func (ch *controller) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": true,
 			"data":  nil,
+			"token": nil,
 			"msg":   "Failed to read request",
 		})
 		return
@@ -225,6 +226,7 @@ func (ch *controller) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": true,
 			"data":  nil,
+			"token": nil,
 			"msg":   "Invalid email or password",
 		})
 		return
@@ -242,6 +244,7 @@ func (ch *controller) Login(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": true,
 			"data":  nil,
+			"token": nil,
 			"msg":   "Failed to create token",
 		})
 		return
@@ -253,7 +256,8 @@ func (ch *controller) Login(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"error": false,
 		"msg":   "Success!",
-		"data":  tokenString,
+		"token": tokenString,
+		"data":  user,
 	})
 }
 
