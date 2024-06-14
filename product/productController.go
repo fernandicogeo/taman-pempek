@@ -1,15 +1,20 @@
 package product
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"path/filepath"
 	"strconv"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
 	"github.com/google/uuid"
+	"github.com/joho/godotenv"
 )
 
 type controller struct {
@@ -85,6 +90,11 @@ func (cn *controller) GetProduct(c *gin.Context) {
 func (cn *controller) CreateProduct(c *gin.Context) {
 	var productRequest ProductCreateRequest
 
+	apiKey := goDotEnvVariable("APIKEY")
+	apiSecret := goDotEnvVariable("APISECRET")
+
+	urlCloudinary := "cloudinary://" + apiKey + ":" + apiSecret + "@dqudegiey"
+
 	err := c.ShouldBind(&productRequest)
 
 	if err != nil {
@@ -101,15 +111,6 @@ func (cn *controller) CreateProduct(c *gin.Context) {
 		return
 	}
 
-	if err := os.MkdirAll("/public/product/image", 0755); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": true,
-			"data":  nil,
-			"msg":   err.Error(),
-		})
-		return
-	}
-
 	userID, errorID := c.Get("UserID")
 
 	if !errorID {
@@ -122,15 +123,15 @@ func (cn *controller) CreateProduct(c *gin.Context) {
 
 	productRequest.UserID = int(userID.(uint64))
 
-	// rename file
-	ext := filepath.Ext(productRequest.Image.Filename)
-	newFileName := uuid.New().String() + ext
+	file, _ := productRequest.Image.Open()
 
-	// save file
-	dst := filepath.Join("public/product/image", filepath.Base(newFileName))
-	c.SaveUploadedFile(&productRequest.Image, dst)
+	ctx := context.Background()
 
-	productRequest.Image.Filename = fmt.Sprintf("%s/public/product/image/%s", c.Request.Host, newFileName)
+	cldService, _ := cloudinary.NewFromURL(urlCloudinary)
+	imageResponse, _ := cldService.Upload.Upload(ctx, file, uploader.UploadParams{})
+
+	productRequest.Image.Filename = imageResponse.SecureURL
+
 	product, err := cn.productService.CreateProduct(productRequest)
 
 	if err != nil {
@@ -269,4 +270,12 @@ func convertToProductResponse(product Product) ProductResponse {
 		Price:       product.Price,
 		Stock:       product.Stock,
 	}
+}
+
+func goDotEnvVariable(key string) string {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	return os.Getenv(key)
 }
