@@ -6,14 +6,12 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"path/filepath"
 	"strconv"
 
 	"github.com/cloudinary/cloudinary-go/v2"
 	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
-	"github.com/google/uuid"
 	"github.com/joho/godotenv"
 )
 
@@ -153,6 +151,11 @@ func (cn *controller) CreateProduct(c *gin.Context) {
 func (cn *controller) UpdateProduct(c *gin.Context) {
 	var productRequest ProductUpdateRequest
 
+	apiKey := goDotEnvVariable("APIKEY")
+	apiSecret := goDotEnvVariable("APISECRET")
+
+	urlCloudinary := "cloudinary://" + apiKey + ":" + apiSecret + "@dqudegiey"
+
 	err := c.ShouldBind(&productRequest)
 
 	if err != nil {
@@ -170,24 +173,14 @@ func (cn *controller) UpdateProduct(c *gin.Context) {
 	}
 
 	if productRequest.Image != nil {
-		if err := os.MkdirAll("/public/product/image", 0755); err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"error": true,
-				"data":  nil,
-				"msg":   err.Error(),
-			})
-			return
-		}
+		file, _ := productRequest.Image.Open()
 
-		// rename file
-		ext := filepath.Ext(productRequest.Image.Filename)
-		newFileName := uuid.New().String() + ext
+		ctx := context.Background()
 
-		// save file
-		dst := filepath.Join("public/product/image", filepath.Base(newFileName))
-		c.SaveUploadedFile(productRequest.Image, dst)
+		cldService, _ := cloudinary.NewFromURL(urlCloudinary)
+		imageResponse, _ := cldService.Upload.Upload(ctx, file, uploader.UploadParams{})
 
-		productRequest.Image.Filename = fmt.Sprintf("%s/public/product/image/%s", c.Request.Host, newFileName)
+		productRequest.Image.Filename = imageResponse.SecureURL
 	}
 
 	idString := c.Param("id")
