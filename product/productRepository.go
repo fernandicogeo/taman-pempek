@@ -9,6 +9,7 @@ import (
 type ProductRepository interface {
 	FindAll() ([]Product, error)
 	FindProductByID(ID int) (Product, error)
+	GetProductByUserIDAndCategoryID(userID int, categoryID int) ([]Product, error)
 	CreateProduct(product Product) (Product, error)
 	UpdateProduct(product Product) (Product, error)
 	DeleteProduct(product Product) (Product, error)
@@ -35,6 +36,15 @@ func (r *repository) FindProductByID(ID int) (Product, error) {
 		return Product{}, errors.New("Product not found")
 	}
 	return product, err
+}
+
+func (r *repository) GetProductByUserIDAndCategoryID(userID int, categoryID int) ([]Product, error) {
+	var products []Product
+	err := r.db.Where("user_id = ? AND category_id = ?", userID, categoryID).Find(&products).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return []Product{}, errors.New("Product not found")
+	}
+	return products, err
 }
 
 func (r *repository) CreateProduct(product Product) (Product, error) {

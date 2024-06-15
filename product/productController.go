@@ -67,7 +67,7 @@ func (cn *controller) GetProduct(c *gin.Context) {
 
 	if err != nil {
 		statusCode := http.StatusInternalServerError
-		if err.Error() == "product not found" {
+		if err.Error() == "Product not found" {
 			statusCode = http.StatusNotFound
 		}
 		c.JSON(statusCode, gin.H{
@@ -82,6 +82,61 @@ func (cn *controller) GetProduct(c *gin.Context) {
 		"error": false,
 		"msg":   "Success!",
 		"data":  convertToProductResponse(product),
+	})
+}
+
+func (cn *controller) GetProductByUserIDAndCategoryID(c *gin.Context) {
+	userIdString := c.Param("userId")
+	userId, err := strconv.Atoi(userIdString)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid user ID",
+		})
+		return
+	}
+
+	categoryIdString := c.Param("categoryId")
+	categoryId, err := strconv.Atoi(categoryIdString)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid category ID",
+		})
+		return
+	}
+
+	products, err := cn.productService.GetProductByUserIDAndCategoryID(userId, categoryId)
+
+	if err != nil {
+		statusCode := http.StatusInternalServerError
+		if err.Error() == "Products not found" {
+			statusCode = http.StatusNotFound
+		}
+		c.JSON(statusCode, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
+		})
+		return
+	}
+
+	var productsResponse []ProductResponse
+
+	for _, product := range products {
+		productResponse := convertToProductResponse(product)
+
+		productsResponse = append(productsResponse, productResponse)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"msg":   "Success!",
+		"data":  productsResponse,
 	})
 }
 

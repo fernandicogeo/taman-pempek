@@ -9,6 +9,7 @@ import (
 type ProductService interface {
 	FindAll() ([]Product, error)
 	FindProductByID(ID int) (Product, error)
+	GetProductByUserIDAndCategoryID(userID int, categoryID int) ([]Product, error)
 	CreateProduct(product ProductCreateRequest) (Product, error)
 	UpdateProduct(ID int, product ProductUpdateRequest) (Product, error)
 	DeleteProduct(ID int) (Product, error)
@@ -28,6 +29,10 @@ func (s *service) FindAll() ([]Product, error) {
 
 func (s *service) FindProductByID(ID int) (Product, error) {
 	return s.productRepository.FindProductByID(ID)
+}
+
+func (s *service) GetProductByUserIDAndCategoryID(userID int, categoryID int) ([]Product, error) {
+	return s.productRepository.GetProductByUserIDAndCategoryID(userID, categoryID)
 }
 
 func (s *service) CreateProduct(productRequest ProductCreateRequest) (Product, error) {
