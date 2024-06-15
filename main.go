@@ -77,14 +77,14 @@ func routeUser(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)
 	userService := user.NewService(userRepository)
 	userController := user.NewController(userService)
 
-	v.GET("/users", requireAuth, userController.GetUsers)
-	v.GET("/user/:id", requireAuth, userController.GetUser)
+	v.GET("/users", userController.GetUsers)
+	v.GET("/user/:id", userController.GetUser)
 	v.POST("/user/register", userController.CreateUser)
-	v.PUT("/user/update/:id", requireAuth, userController.UpdateUser)
-	v.DELETE("/user/delete/:id", requireAuth, userController.DeleteUser)
+	v.PUT("/user/update/:id", userController.UpdateUser)
+	v.DELETE("/user/delete/:id", userController.DeleteUser)
 
 	v.POST("/login", userController.Login)
-	v.POST("/logout", requireAuth, userController.Logout)
+	v.POST("/logout", userController.Logout)
 }
 
 func routeProduct(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)) {
@@ -92,12 +92,12 @@ func routeProduct(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Conte
 	productService := product.NewService(productRepository)
 	productController := product.NewController(productService)
 
-	v.GET("/products", requireAuth, productController.GetProducts)
-	v.GET("/products/:userId/:categoryId", requireAuth, productController.GetProductByUserIDAndCategoryID)
-	v.GET("/product/:id", requireAuth, productController.GetProduct)
-	v.POST("/product/create", requireAuth, productController.CreateProduct)
-	v.PUT("/product/update/:id", requireAuth, productController.UpdateProduct)
-	v.DELETE("/product/delete/:id", requireAuth, productController.DeleteProduct)
+	v.GET("/products", productController.GetProducts)
+	v.GET("/products/:userId/:categoryId", productController.GetProductByUserIDAndCategoryID)
+	v.GET("/product/:id", productController.GetProduct)
+	v.POST("/product/create", productController.CreateProduct)
+	v.PUT("/product/update/:id", productController.UpdateProduct)
+	v.DELETE("/product/delete/:id", productController.DeleteProduct)
 }
 
 func routeBank(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)) {
@@ -105,11 +105,11 @@ func routeBank(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)
 	bankService := bank.NewService(bankRepository)
 	bankController := bank.NewController(bankService)
 
-	v.GET("/banks", requireAuth, bankController.GetBanks)
-	v.GET("/bank/:id", requireAuth, bankController.GetBank)
-	v.POST("/bank/create", requireAuth, bankController.CreateBank)
-	v.PUT("/bank/update/:id", requireAuth, bankController.UpdateBank)
-	v.DELETE("/bank/delete/:id", requireAuth, bankController.DeleteBank)
+	v.GET("/banks", bankController.GetBanks)
+	v.GET("/bank/:id", bankController.GetBank)
+	v.POST("/bank/create", bankController.CreateBank)
+	v.PUT("/bank/update/:id", bankController.UpdateBank)
+	v.DELETE("/bank/delete/:id", bankController.DeleteBank)
 }
 
 func routeCategory(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)) {
@@ -117,11 +117,11 @@ func routeCategory(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Cont
 	categoryService := category.NewService(categoryRepository)
 	categoryController := category.NewController(categoryService)
 
-	v.GET("/categories", requireAuth, categoryController.GetCategories)
-	v.GET("/category/:id", requireAuth, categoryController.GetCategory)
-	v.POST("/category/create", requireAuth, categoryController.CreateCategory)
-	v.PUT("/category/update/:id", requireAuth, categoryController.UpdateCategory)
-	v.DELETE("/category/delete/:id", requireAuth, categoryController.DeleteCategory)
+	v.GET("/categories", categoryController.GetCategories)
+	v.GET("/category/:id", categoryController.GetCategory)
+	v.POST("/category/create", categoryController.CreateCategory)
+	v.PUT("/category/update/:id", categoryController.UpdateCategory)
+	v.DELETE("/category/delete/:id", categoryController.DeleteCategory)
 }
 
 func routeDelivery(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)) {
@@ -129,11 +129,11 @@ func routeDelivery(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Cont
 	deliveryService := delivery.NewService(deliveryRepository)
 	deliveryController := delivery.NewController(deliveryService)
 
-	v.GET("/deliveries", requireAuth, deliveryController.GetDeliveries)
-	v.GET("/delivery/:id", requireAuth, deliveryController.GetDelivery)
-	v.POST("/delivery/create", requireAuth, deliveryController.CreateDelivery)
-	v.PUT("/delivery/update/:id", requireAuth, deliveryController.UpdateDelivery)
-	v.DELETE("/delivery/delete/:id", requireAuth, deliveryController.DeleteDelivery)
+	v.GET("/deliveries", deliveryController.GetDeliveries)
+	v.GET("/delivery/:id", deliveryController.GetDelivery)
+	v.POST("/delivery/create", deliveryController.CreateDelivery)
+	v.PUT("/delivery/update/:id", deliveryController.UpdateDelivery)
+	v.DELETE("/delivery/delete/:id", deliveryController.DeleteDelivery)
 }
 
 func routeCart(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)) {
@@ -141,11 +141,11 @@ func routeCart(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)
 	cartService := cart.NewService(cartRepository)
 	cartController := cart.NewController(cartService)
 
-	v.GET("/carts", requireAuth, cartController.GetCarts)
-	v.GET("/cart/:id", requireAuth, cartController.GetCart)
-	v.POST("/cart/create", requireAuth, cartController.CreateCart)
-	v.PUT("/cart/update/:id", requireAuth, cartController.UpdateCart)
-	v.DELETE("/cart/delete/:id", requireAuth, cartController.DeleteCart)
+	v.GET("/carts", cartController.GetCarts)
+	v.GET("/cart/:id", cartController.GetCart)
+	v.POST("/cart/create", cartController.CreateCart)
+	v.PUT("/cart/update/:id", cartController.UpdateCart)
+	v.DELETE("/cart/delete/:id", cartController.DeleteCart)
 }
 
 func routePayment(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)) {
@@ -153,9 +153,9 @@ func routePayment(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Conte
 	paymentService := payment.NewService(paymentRepository)
 	paymentController := payment.NewController(paymentService)
 
-	v.GET("/payments", requireAuth, paymentController.GetPayments)
-	v.GET("/payment/:id", requireAuth, paymentController.GetPayment)
-	v.POST("/payment/create", requireAuth, paymentController.CreatePayment)
-	v.PUT("/payment/update/:id", requireAuth, paymentController.UpdatePayment)
-	v.DELETE("/payment/delete/:id", requireAuth, paymentController.DeletePayment)
+	v.GET("/payments", paymentController.GetPayments)
+	v.GET("/payment/:id", paymentController.GetPayment)
+	v.POST("/payment/create", paymentController.CreatePayment)
+	v.PUT("/payment/update/:id", paymentController.UpdatePayment)
+	v.DELETE("/payment/delete/:id", paymentController.DeletePayment)
 }
