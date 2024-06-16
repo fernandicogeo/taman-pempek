@@ -176,12 +176,40 @@ func (cn *controller) CreateProduct(c *gin.Context) {
 
 	productRequest.UserID = int(userID.(uint64))
 
-	file, _ := productRequest.Image.Open()
+	file, err := productRequest.Image.Open()
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
+		})
+		return
+	}
 
 	ctx := context.Background()
 
-	cldService, _ := cloudinary.NewFromURL(urlCloudinary)
-	imageResponse, _ := cldService.Upload.Upload(ctx, file, uploader.UploadParams{})
+	cldService, err := cloudinary.NewFromURL(urlCloudinary)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
+		})
+		return
+	}
+
+	imageResponse, err := cldService.Upload.Upload(ctx, file, uploader.UploadParams{})
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
+		})
+		return
+	}
 
 	productRequest.Image.Filename = imageResponse.SecureURL
 
