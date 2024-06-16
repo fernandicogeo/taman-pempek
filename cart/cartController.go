@@ -98,18 +98,6 @@ func (cn *controller) CreateCart(c *gin.Context) {
 		return
 	}
 
-	userID, errorID := c.Get("UserID")
-
-	if !errorID {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": true,
-			"data":  nil,
-			"msg":   errorID,
-		})
-	}
-
-	cartRequest.UserID = int(userID.(uint64))
-
 	cart, err := cn.cartService.CreateCart(cartRequest)
 
 	if err != nil {
