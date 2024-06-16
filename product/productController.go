@@ -166,6 +166,8 @@ func (cn *controller) CreateProduct(c *gin.Context) {
 
 	userID, errorID := c.Get("UserID")
 
+	fmt.Println(userID)
+
 	if !errorID {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": true,
