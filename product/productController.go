@@ -170,11 +170,22 @@ func (cn *controller) CreateProduct(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": true,
 			"data":  nil,
-			"msg":   errorID,
+			"msg":   "UserID not found",
 		})
+		return
 	}
 
-	productRequest.UserID = int(userID.(uint64))
+	userIDInt, ok := userID.(int)
+	if !ok {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   "UserID is not an integer",
+		})
+		return
+	}
+
+	productRequest.UserID = userIDInt
 
 	file, err := productRequest.Image.Open()
 
