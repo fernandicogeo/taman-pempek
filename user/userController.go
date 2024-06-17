@@ -269,7 +269,7 @@ func (cn *controller) Logout(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"error": false,
-		"msg":   "Logged out successfully",
+		"msg":   "Logged out successfully!",
 	})
 }
 
