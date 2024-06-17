@@ -41,8 +41,8 @@ func (s *service) GetProductByUser(userID int) ([]Product, error) {
 	return s.productRepository.GetProductByUser(userID)
 }
 
-func (s *service) GetProductByCategory(productID int) ([]Product, error) {
-	return s.productRepository.GetProductByUser(productID)
+func (s *service) GetProductByCategory(categoryID int) ([]Product, error) {
+	return s.productRepository.GetProductByCategory(categoryID)
 }
 
 func (s *service) CreateProduct(productRequest ProductCreateRequest) (Product, error) {
