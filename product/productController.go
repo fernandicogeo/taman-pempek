@@ -140,6 +140,49 @@ func (cn *controller) GetProductByUserIDAndCategoryID(c *gin.Context) {
 	})
 }
 
+func (cn *controller) GetProductByUser(c *gin.Context) {
+	userIdString := c.Param("userId")
+	userId, err := strconv.Atoi(userIdString)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid user ID",
+		})
+		return
+	}
+
+	products, err := cn.productService.GetProductByUser(userId)
+
+	if err != nil {
+		statusCode := http.StatusInternalServerError
+		if err.Error() == "Products not found" {
+			statusCode = http.StatusNotFound
+		}
+		c.JSON(statusCode, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
+		})
+		return
+	}
+
+	var productsResponse []ProductResponse
+
+	for _, product := range products {
+		productResponse := convertToProductResponse(product)
+
+		productsResponse = append(productsResponse, productResponse)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"msg":   "Success!",
+		"data":  productsResponse,
+	})
+}
+
 func (cn *controller) CreateProduct(c *gin.Context) {
 	var productRequest ProductCreateRequest
 

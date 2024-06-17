@@ -93,6 +93,7 @@ func routeProduct(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Conte
 	productController := product.NewController(productService)
 
 	v.GET("/products", productController.GetProducts)
+	v.GET("/products/:userId/", productController.GetProductByUser)
 	v.GET("/products/:userId/:categoryId", productController.GetProductByUserIDAndCategoryID)
 	v.GET("/product/:id", productController.GetProduct)
 	v.POST("/product/create", productController.CreateProduct)
