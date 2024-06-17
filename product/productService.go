@@ -11,6 +11,7 @@ type ProductService interface {
 	FindProductByID(ID int) (Product, error)
 	GetProductByUserIDAndCategoryID(userID int, categoryID int) ([]Product, error)
 	GetProductByUser(userID int) ([]Product, error)
+	GetProductByCategory(categoryID int) ([]Product, error)
 	CreateProduct(product ProductCreateRequest) (Product, error)
 	UpdateProduct(ID int, product ProductUpdateRequest) (Product, error)
 	DeleteProduct(ID int) (Product, error)
@@ -38,6 +39,10 @@ func (s *service) GetProductByUserIDAndCategoryID(userID int, categoryID int) ([
 
 func (s *service) GetProductByUser(userID int) ([]Product, error) {
 	return s.productRepository.GetProductByUser(userID)
+}
+
+func (s *service) GetProductByCategory(productID int) ([]Product, error) {
+	return s.productRepository.GetProductByUser(productID)
 }
 
 func (s *service) CreateProduct(productRequest ProductCreateRequest) (Product, error) {
