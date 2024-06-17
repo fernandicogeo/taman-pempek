@@ -108,6 +108,7 @@ func routeBank(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)
 	bankController := bank.NewController(bankService)
 
 	v.GET("/banks", bankController.GetBanks)
+	v.GET("/banks/:userId", bankController.GetBanksByUser)
 	v.GET("/bank/:id", bankController.GetBank)
 	v.POST("/bank/create", bankController.CreateBank)
 	v.PUT("/bank/update/:id", bankController.UpdateBank)

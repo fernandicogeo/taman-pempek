@@ -44,6 +44,49 @@ func (cn *controller) GetBanks(c *gin.Context) {
 	})
 }
 
+func (cn *controller) GetBanksByUser(c *gin.Context) {
+	userIdString := c.Param("userId")
+	userId, err := strconv.Atoi(userIdString)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid user ID",
+		})
+		return
+	}
+
+	banks, err := cn.bankService.FindBanksByUser(userId)
+
+	if err != nil {
+		statusCode := http.StatusInternalServerError
+		if err.Error() == "Banks not found" {
+			statusCode = http.StatusNotFound
+		}
+		c.JSON(statusCode, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
+		})
+		return
+	}
+
+	var banksResponse []BankResponse
+
+	for _, bank := range banks {
+		bankResponse := convertToBankResponse(bank)
+
+		banksResponse = append(banksResponse, bankResponse)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"msg":   "Success!",
+		"data":  banksResponse,
+	})
+}
+
 func (cn *controller) GetBank(c *gin.Context) {
 	idString := c.Param("id")
 	id, err := strconv.Atoi(idString)
@@ -207,6 +250,7 @@ func (ch *controller) DeleteBank(c *gin.Context) {
 func convertToBankResponse(bank Bank) BankResponse {
 	return BankResponse{
 		ID:     bank.ID,
+		UserID: bank.UserID,
 		Type:   bank.Type,
 		Name:   bank.Name,
 		Number: bank.Number,
