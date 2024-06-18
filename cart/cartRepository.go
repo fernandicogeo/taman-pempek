@@ -36,7 +36,8 @@ func (r *repository) FindCartByID(ID int) (Cart, error) {
 
 func (r *repository) FindActivedCartsByUser(userID int) ([]Cart, error) {
 	var carts []Cart
-	err := r.db.Where("user_id = ? AND isActived = actived", userID).Find(&carts).Error
+	isActived := "actived"
+	err := r.db.Where("user_id = ? AND isActived = ?", userID, isActived).Find(&carts).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return []Cart{}, errors.New("Cart not found")
 	}
