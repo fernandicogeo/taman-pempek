@@ -79,6 +79,45 @@ func (cn *controller) GetCart(c *gin.Context) {
 	})
 }
 
+func (cn *controller) FindActivedCartsByUser(c *gin.Context) {
+	idString := c.Param("userId")
+	id, err := strconv.Atoi(idString)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid cart ID",
+		})
+		return
+	}
+
+	carts, err := cn.cartService.FindActivedCartsByUser(id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err,
+		})
+		return
+	}
+
+	var cartsResponse []CartResponse
+
+	for _, cart := range carts {
+		cartResponse := convertToCartResponse(cart)
+
+		cartsResponse = append(cartsResponse, cartResponse)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"msg":   "Success!",
+		"data":  cartsResponse,
+	})
+}
+
 func (cn *controller) CreateCart(c *gin.Context) {
 	var cartRequest CartCreateRequest
 

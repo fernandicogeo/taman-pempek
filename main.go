@@ -146,6 +146,7 @@ func routeCart(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)
 
 	v.GET("/carts", cartController.GetCarts)
 	v.GET("/cart/:id", cartController.GetCart)
+	v.GET("/carts/actived/:userId", cartController.FindActivedCartsByUser)
 	v.POST("/cart/create", cartController.CreateCart)
 	v.PUT("/cart/update/:id", cartController.UpdateCart)
 	v.DELETE("/cart/delete/:id", cartController.DeleteCart)

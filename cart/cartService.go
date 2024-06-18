@@ -9,6 +9,7 @@ import (
 type CartService interface {
 	FindAll() ([]Cart, error)
 	FindCartByID(ID int) (Cart, error)
+	FindActivedCartsByUser(userID int) ([]Cart, error)
 	CreateCart(cart CartCreateRequest) (Cart, error)
 	UpdateCart(ID int, cart CartUpdateRequest) (Cart, error)
 	DeleteCart(ID int) (Cart, error)
@@ -28,6 +29,10 @@ func (s *service) FindAll() ([]Cart, error) {
 
 func (s *service) FindCartByID(ID int) (Cart, error) {
 	return s.cartRepository.FindCartByID(ID)
+}
+
+func (s *service) FindActivedCartsByUser(userID int) ([]Cart, error) {
+	return s.cartRepository.FindActivedCartsByUser(userID)
 }
 
 func (s *service) CreateCart(cartRequest CartCreateRequest) (Cart, error) {
