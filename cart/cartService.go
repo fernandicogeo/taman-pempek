@@ -10,7 +10,7 @@ type CartService interface {
 	FindAll() ([]Cart, error)
 	FindCartByID(ID int) (Cart, error)
 	FindStatusCardByUser(userID int, isActived string) ([]Cart, error)
-	SumTotalPriceByUser(userID int) (int, error)
+	SumTotalPriceByUser(userID int, isActived string) (int, error)
 	CreateCart(cart CartCreateRequest) (Cart, error)
 	UpdateCart(ID int, cart CartUpdateRequest) (Cart, error)
 	DeleteCart(ID int) (Cart, error)
@@ -36,8 +36,8 @@ func (s *service) FindStatusCardByUser(userID int, isActived string) ([]Cart, er
 	return s.cartRepository.FindStatusCardByUser(userID, isActived)
 }
 
-func (s *service) SumTotalPriceByUser(userID int) (int, error) {
-	return s.cartRepository.SumTotalPriceByUser(userID)
+func (s *service) SumTotalPriceByUser(userID int, isActived string) (int, error) {
+	return s.cartRepository.SumTotalPriceByUser(userID, isActived)
 }
 
 func (s *service) CreateCart(cartRequest CartCreateRequest) (Cart, error) {

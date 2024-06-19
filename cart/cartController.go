@@ -124,6 +124,8 @@ func (cn *controller) SumTotalPriceByUser(c *gin.Context) {
 	idString := c.Param("userId")
 	id, err := strconv.Atoi(idString)
 
+	isActived := c.Param("isActived")
+
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": true,
@@ -133,7 +135,7 @@ func (cn *controller) SumTotalPriceByUser(c *gin.Context) {
 		return
 	}
 
-	total_price, err := cn.cartService.SumTotalPriceByUser(id)
+	total_price, err := cn.cartService.SumTotalPriceByUser(id, isActived)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

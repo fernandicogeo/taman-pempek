@@ -10,7 +10,7 @@ type CartRepository interface {
 	FindAll() ([]Cart, error)
 	FindCartByID(ID int) (Cart, error)
 	FindStatusCardByUser(userID int, isActived string) ([]Cart, error)
-	SumTotalPriceByUser(userID int) (int, error)
+	SumTotalPriceByUser(userID int, isActived string) (int, error)
 	CreateCart(cart Cart) (Cart, error)
 	UpdateCart(cart Cart) (Cart, error)
 	DeleteCart(cart Cart) (Cart, error)
@@ -44,9 +44,8 @@ func (r *repository) FindStatusCardByUser(userID int, isActived string) ([]Cart,
 	return carts, err
 }
 
-func (r *repository) SumTotalPriceByUser(userID int) (int, error) {
+func (r *repository) SumTotalPriceByUser(userID int, isActived string) (int, error) {
 	var total int
-	isActived := "actived"
 	err := r.db.Model(&Cart{}).
 		Where("user_id = ? AND isActived = ?", userID, isActived).
 		Select("SUM(total_price)").
