@@ -8,6 +8,7 @@ import (
 
 type BankService interface {
 	FindAll() ([]Bank, error)
+	FindAdminBanks() ([]Bank, error)
 	FindBanksByUser(userID int) ([]Bank, error)
 	FindBankByID(ID int) (Bank, error)
 	CreateBank(bank BankCreateRequest) (Bank, error)
@@ -25,6 +26,10 @@ func NewService(bankRepository BankRepository) *service {
 
 func (s *service) FindAll() ([]Bank, error) {
 	return s.bankRepository.FindAll()
+}
+
+func (s *service) FindAdminBanks() ([]Bank, error) {
+	return s.bankRepository.FindAdminBanks()
 }
 
 func (s *service) FindBanksByUser(userID int) ([]Bank, error) {

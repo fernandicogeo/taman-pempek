@@ -44,6 +44,33 @@ func (cn *controller) GetBanks(c *gin.Context) {
 	})
 }
 
+func (cn *controller) GetAdminBanks(c *gin.Context) {
+	banks, err := cn.bankService.FindAdminBanks()
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err,
+		})
+		return
+	}
+
+	var banksResponse []BankResponse
+
+	for _, bank := range banks {
+		bankResponse := convertToBankResponse(bank)
+
+		banksResponse = append(banksResponse, bankResponse)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"msg":   "Success!",
+		"data":  banksResponse,
+	})
+}
+
 func (cn *controller) GetBanksByUser(c *gin.Context) {
 	userIdString := c.Param("userId")
 	userId, err := strconv.Atoi(userIdString)

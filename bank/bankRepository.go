@@ -8,6 +8,7 @@ import (
 
 type BankRepository interface {
 	FindAll() ([]Bank, error)
+	FindAdminBanks() ([]Bank, error)
 	FindBanksByUser(userID int) ([]Bank, error)
 	FindBankByID(ID int) (Bank, error)
 	CreateBank(bank Bank) (Bank, error)
@@ -26,6 +27,16 @@ func NewRepository(db *gorm.DB) *repository {
 func (r *repository) FindAll() ([]Bank, error) {
 	var banks []Bank
 	err := r.db.Find(&banks).Error
+	return banks, err
+}
+
+func (r *repository) FindAdminBanks() ([]Bank, error) {
+	var banks []Bank
+	userID := 10
+	err := r.db.Where("user_id = ?", userID).Find(&banks).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return []Bank{}, errors.New("Bank not found")
+	}
 	return banks, err
 }
 
