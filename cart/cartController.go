@@ -79,9 +79,11 @@ func (cn *controller) GetCart(c *gin.Context) {
 	})
 }
 
-func (cn *controller) FindActivedCartsByUser(c *gin.Context) {
+func (cn *controller) FindStatusCardByUser(c *gin.Context) {
 	idString := c.Param("userId")
 	id, err := strconv.Atoi(idString)
+
+	isActived := c.Param("isActived")
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -92,7 +94,7 @@ func (cn *controller) FindActivedCartsByUser(c *gin.Context) {
 		return
 	}
 
-	carts, err := cn.cartService.FindActivedCartsByUser(id)
+	carts, err := cn.cartService.FindStatusCardByUser(id, isActived)
 
 	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{

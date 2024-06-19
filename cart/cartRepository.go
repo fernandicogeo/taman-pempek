@@ -9,7 +9,7 @@ import (
 type CartRepository interface {
 	FindAll() ([]Cart, error)
 	FindCartByID(ID int) (Cart, error)
-	FindActivedCartsByUser(userID int) ([]Cart, error)
+	FindStatusCardByUser(userID int, isActived string) ([]Cart, error)
 	SumTotalPriceByUser(userID int) (int, error)
 	CreateCart(cart Cart) (Cart, error)
 	UpdateCart(cart Cart) (Cart, error)
@@ -35,9 +35,8 @@ func (r *repository) FindCartByID(ID int) (Cart, error) {
 	return cart, err
 }
 
-func (r *repository) FindActivedCartsByUser(userID int) ([]Cart, error) {
+func (r *repository) FindStatusCardByUser(userID int, isActived string) ([]Cart, error) {
 	var carts []Cart
-	isActived := "actived"
 	err := r.db.Where("user_id = ? AND isActived = ?", userID, isActived).Find(&carts).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return []Cart{}, errors.New("Cart not found")
