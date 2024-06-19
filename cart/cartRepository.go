@@ -10,6 +10,7 @@ type CartRepository interface {
 	FindAll() ([]Cart, error)
 	FindCartByID(ID int) (Cart, error)
 	FindActivedCartsByUser(userID int) ([]Cart, error)
+	SumTotalPriceByUser(userID int) (int, error)
 	CreateCart(cart Cart) (Cart, error)
 	UpdateCart(cart Cart) (Cart, error)
 	DeleteCart(cart Cart) (Cart, error)
@@ -42,6 +43,19 @@ func (r *repository) FindActivedCartsByUser(userID int) ([]Cart, error) {
 		return []Cart{}, errors.New("Cart not found")
 	}
 	return carts, err
+}
+
+func (r *repository) SumTotalPriceByUser(userID int) (int, error) {
+	var total int
+	isActived := "actived"
+	err := r.db.Model(&Cart{}).
+		Where("user_id = ? AND isActived = ?", userID, isActived).
+		Select("SUM(total_price)").
+		Scan(&total).Error
+	if err != nil {
+		return 0, err
+	}
+	return total, nil
 }
 
 func NewRepository(db *gorm.DB) *repository {

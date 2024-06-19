@@ -118,6 +118,37 @@ func (cn *controller) FindActivedCartsByUser(c *gin.Context) {
 	})
 }
 
+func (cn *controller) SumTotalPriceByUser(c *gin.Context) {
+	idString := c.Param("userId")
+	id, err := strconv.Atoi(idString)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid cart ID",
+		})
+		return
+	}
+
+	total_price, err := cn.cartService.SumTotalPriceByUser(id)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err,
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"msg":   "Success!",
+		"data":  total_price,
+	})
+}
+
 func (cn *controller) CreateCart(c *gin.Context) {
 	var cartRequest CartCreateRequest
 
