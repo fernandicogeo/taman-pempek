@@ -36,6 +36,7 @@ func (s *service) CreatePayment(paymentRequest PaymentCreateRequest) (Payment, e
 		BankID:         paymentRequest.BankID,
 		DeliveryID:     paymentRequest.DeliveryID,
 		TotalPrice:     paymentRequest.TotalPrice,
+		Image:          paymentRequest.Image.Filename,
 		PaymentStatus:  paymentRequest.PaymentStatus,
 		DeliveryStatus: paymentRequest.DeliveryStatus,
 	}

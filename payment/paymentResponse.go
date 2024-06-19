@@ -8,6 +8,7 @@ type PaymentResponse struct {
 	BankID         json.Number `json:"bank_id"`
 	DeliveryID     json.Number `json:"delivery_id"`
 	TotalPrice     json.Number `json:"total_price"`
+	Image          string      `json:"image"`
 	PaymentStatus  string      `json:"payment_status"`
 	DeliveryStatus string      `json:"delivery_status"`
 }

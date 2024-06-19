@@ -1,12 +1,18 @@
 package payment
 
 import (
+	"context"
 	"fmt"
+	"log"
 	"net/http"
+	"os"
 	"strconv"
 
+	"github.com/cloudinary/cloudinary-go/v2"
+	"github.com/cloudinary/cloudinary-go/v2/api/uploader"
 	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"github.com/joho/godotenv"
 )
 
 type controller struct {
@@ -82,6 +88,11 @@ func (cn *controller) GetPayment(c *gin.Context) {
 func (cn *controller) CreatePayment(c *gin.Context) {
 	var paymentRequest PaymentCreateRequest
 
+	apiKey := goDotEnvVariable("APIKEY")
+	apiSecret := goDotEnvVariable("APISECRET")
+
+	urlCloudinary := "cloudinary://" + apiKey + ":" + apiSecret + "@dqudegiey"
+
 	err := c.ShouldBindJSON(&paymentRequest)
 
 	if err != nil {
@@ -98,17 +109,42 @@ func (cn *controller) CreatePayment(c *gin.Context) {
 		return
 	}
 
-	userID, errorID := c.Get("UserID")
+	file, err := paymentRequest.Image.Open()
 
-	if !errorID {
+	if err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": true,
 			"data":  nil,
-			"msg":   errorID,
+			"msg":   err.Error(),
 		})
+		return
 	}
 
-	paymentRequest.UserID = int(userID.(uint64))
+	ctx := context.Background()
+
+	cldService, err := cloudinary.NewFromURL(urlCloudinary)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
+		})
+		return
+	}
+
+	imageResponse, err := cldService.Upload.Upload(ctx, file, uploader.UploadParams{})
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err.Error(),
+		})
+		return
+	}
+
+	paymentRequest.Image.Filename = imageResponse.SecureURL
 
 	payment, err := cn.paymentService.CreatePayment(paymentRequest)
 
@@ -223,7 +259,16 @@ func convertToPaymentResponse(payment Payment) PaymentResponse {
 		BankID:         payment.BankID,
 		DeliveryID:     payment.DeliveryID,
 		TotalPrice:     payment.TotalPrice,
+		Image:          payment.Image,
 		PaymentStatus:  payment.PaymentStatus,
 		DeliveryStatus: payment.DeliveryStatus,
 	}
+}
+
+func goDotEnvVariable(key string) string {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatalf("Error loading .env file")
+	}
+	return os.Getenv(key)
 }
