@@ -93,7 +93,7 @@ func (cn *controller) CreatePayment(c *gin.Context) {
 
 	urlCloudinary := "cloudinary://" + apiKey + ":" + apiSecret + "@dqudegiey"
 
-	err := c.ShouldBindJSON(&paymentRequest)
+	err := c.ShouldBind(&paymentRequest)
 
 	if err != nil {
 		errorMessages := []string{}
@@ -167,7 +167,7 @@ func (cn *controller) CreatePayment(c *gin.Context) {
 func (cn *controller) UpdatePayment(c *gin.Context) {
 	var paymentRequest PaymentUpdateRequest
 
-	err := c.ShouldBindJSON(&paymentRequest)
+	err := c.ShouldBind(&paymentRequest)
 
 	if err != nil {
 		errorMessages := []string{}
