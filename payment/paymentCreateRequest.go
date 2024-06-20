@@ -6,8 +6,8 @@ import (
 )
 
 type PaymentCreateRequest struct {
-	UserID         int                  `form:"user_id" binding:"required"`
-	BankID         json.Number          `form:"bank_id" binding:"required"`
+	UserID int `form:"user_id" binding:"required"`
+	// BankID         json.Number          `form:"bank_id" binding:"required"`
 	DeliveryID     json.Number          `form:"delivery_id"`
 	TotalPrice     json.Number          `form:"total_price" binding:"required"`
 	Image          multipart.FileHeader `form:"image" binding:"required"`

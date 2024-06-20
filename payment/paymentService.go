@@ -32,8 +32,8 @@ func (s *service) FindPaymentByID(ID int) (Payment, error) {
 
 func (s *service) CreatePayment(paymentRequest PaymentCreateRequest) (Payment, error) {
 	paymentData := Payment{
+		// BankID:         paymentRequest.BankID,
 		UserID:         paymentRequest.UserID,
-		BankID:         paymentRequest.BankID,
 		DeliveryID:     paymentRequest.DeliveryID,
 		TotalPrice:     paymentRequest.TotalPrice,
 		Image:          paymentRequest.Image.Filename,
@@ -57,9 +57,9 @@ func (s *service) UpdatePayment(ID int, paymentRequest PaymentUpdateRequest) (Pa
 		return Payment{}, err
 	}
 
-	if paymentRequest.BankID != "" {
-		payment.BankID = paymentRequest.BankID
-	}
+	// if paymentRequest.BankID != "" {
+	// 	payment.BankID = paymentRequest.BankID
+	// }
 	if paymentRequest.DeliveryID != "" {
 		payment.DeliveryID = paymentRequest.DeliveryID
 	}
