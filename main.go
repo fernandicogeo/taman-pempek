@@ -160,6 +160,7 @@ func routePayment(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Conte
 	paymentController := payment.NewController(paymentService)
 
 	v.GET("/payments", paymentController.GetPayments)
+	v.GET("/payments/:userId/:paymentStatus", paymentController.GetPaymentByUserAndStatus)
 	v.GET("/payment/:id", paymentController.GetPayment)
 	v.POST("/payment/create", paymentController.CreatePayment)
 	v.PUT("/payment/update/:id", paymentController.UpdatePayment)

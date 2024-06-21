@@ -85,6 +85,38 @@ func (cn *controller) GetPayment(c *gin.Context) {
 	})
 }
 
+func (cn *controller) GetPaymentByUserAndStatus(c *gin.Context) {
+	userIdString := c.Param("userId")
+	userId, err := strconv.Atoi(userIdString)
+
+	paymentStatus := c.Param("paymentStatus")
+
+	payments, err := cn.paymentService.FindPaymentByUserAndStatus(userId, paymentStatus)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err,
+		})
+		return
+	}
+
+	var paymentsResponse []PaymentResponse
+
+	for _, payment := range payments {
+		paymentResponse := convertToPaymentResponse(payment)
+
+		paymentsResponse = append(paymentsResponse, paymentResponse)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"msg":   "Success!",
+		"data":  paymentsResponse,
+	})
+}
+
 func (cn *controller) CreatePayment(c *gin.Context) {
 	var paymentRequest PaymentCreateRequest
 

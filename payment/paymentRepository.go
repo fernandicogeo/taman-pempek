@@ -9,6 +9,7 @@ import (
 type PaymentRepository interface {
 	FindAll() ([]Payment, error)
 	FindPaymentByID(ID int) (Payment, error)
+	FindPaymentByUserAndStatus(userID int, paymentStatus string) ([]Payment, error)
 	CreatePayment(payment Payment) (Payment, error)
 	UpdatePayment(payment Payment) (Payment, error)
 	DeletePayment(payment Payment) (Payment, error)
@@ -32,6 +33,16 @@ func (r *repository) FindPaymentByID(ID int) (Payment, error) {
 	}
 	return payment, err
 }
+
+func (r *repository) FindPaymentByUserAndStatus(userID int, paymentStatus string) ([]Payment, error) {
+	var payments []Payment
+	err := r.db.Where("user_id = ? AND payment_status = ?", userID, paymentStatus).Find(&payments).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return []Payment{}, errors.New("Payment not found")
+	}
+	return payments, err
+}
+
 func NewRepository(db *gorm.DB) *repository {
 	return &repository{db}
 }

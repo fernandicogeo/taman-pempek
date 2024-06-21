@@ -9,6 +9,7 @@ import (
 type PaymentService interface {
 	FindAll() ([]Payment, error)
 	FindPaymentByID(ID int) (Payment, error)
+	FindPaymentByUserAndStatus(userID int, paymentStatus string) ([]Payment, error)
 	CreatePayment(payment PaymentCreateRequest) (Payment, error)
 	UpdatePayment(ID int, payment PaymentUpdateRequest) (Payment, error)
 	DeletePayment(ID int) (Payment, error)
@@ -28,6 +29,10 @@ func (s *service) FindAll() ([]Payment, error) {
 
 func (s *service) FindPaymentByID(ID int) (Payment, error) {
 	return s.paymentRepository.FindPaymentByID(ID)
+}
+
+func (s *service) FindPaymentByUserAndStatus(userID int, paymentStatus string) ([]Payment, error) {
+	return s.paymentRepository.FindPaymentByUserAndStatus(userID, paymentStatus)
 }
 
 func (s *service) CreatePayment(paymentRequest PaymentCreateRequest) (Payment, error) {
