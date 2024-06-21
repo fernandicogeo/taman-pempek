@@ -5,7 +5,6 @@ import (
 )
 
 type Payment struct {
-	// BankID         json.Number `gorm:"column:bank_id;type:varchar(255)"`
 	ID             uint64    `gorm:"column:id;primaryKey;autoIncrement"`
 	UserID         int       `gorm:"column:user_id;type:varchar(255)"`
 	DeliveryID     int       `gorm:"column:delivery_id;type:varchar(255)"`

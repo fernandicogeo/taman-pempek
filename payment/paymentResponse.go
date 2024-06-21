@@ -1,7 +1,6 @@
 package payment
 
 type PaymentResponse struct {
-	// BankID         json.Number `json:"bank_id"`
 	ID             uint64 `json:"id"`
 	UserID         int    `json:"user_id"`
 	DeliveryID     int    `json:"delivery_id"`

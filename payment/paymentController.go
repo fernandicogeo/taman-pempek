@@ -286,7 +286,6 @@ func (ch *controller) DeletePayment(c *gin.Context) {
 
 func convertToPaymentResponse(payment Payment) PaymentResponse {
 	return PaymentResponse{
-		// BankID:         payment.BankID,
 		ID:             payment.ID,
 		UserID:         payment.UserID,
 		DeliveryID:     payment.DeliveryID,
