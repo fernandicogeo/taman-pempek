@@ -89,6 +89,15 @@ func (cn *controller) GetPaymentByUserAndStatus(c *gin.Context) {
 	userIdString := c.Param("userId")
 	userId, err := strconv.Atoi(userIdString)
 
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   "Invalid payment ID",
+		})
+		return
+	}
+
 	paymentStatus := c.Param("paymentStatus")
 
 	payments, err := cn.paymentService.FindPaymentByUserAndStatus(userId, paymentStatus)
