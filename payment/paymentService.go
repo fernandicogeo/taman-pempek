@@ -65,10 +65,10 @@ func (s *service) UpdatePayment(ID int, paymentRequest PaymentUpdateRequest) (Pa
 	// if paymentRequest.BankID != "" {
 	// 	payment.BankID = paymentRequest.BankID
 	// }
-	if paymentRequest.DeliveryID != "" {
+	if paymentRequest.DeliveryID != 0 {
 		payment.DeliveryID = paymentRequest.DeliveryID
 	}
-	if paymentRequest.TotalPrice != "" {
+	if paymentRequest.TotalPrice != 0 {
 		payment.TotalPrice = paymentRequest.TotalPrice
 	}
 	if paymentRequest.PaymentStatus != "" {
