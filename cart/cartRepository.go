@@ -10,6 +10,7 @@ type CartRepository interface {
 	FindAll() ([]Cart, error)
 	FindCartByID(ID int) (Cart, error)
 	FindCartsByPaymentID(paymentID int) ([]Cart, error)
+	FindCartsByProductID(productID int) ([]Cart, error)
 	FindStatusCardByUser(userID int, isActived string) ([]Cart, error)
 	SumTotalPriceByUser(userID int, isActived string) (int, error)
 	CreateCart(cart Cart) (Cart, error)
@@ -39,6 +40,15 @@ func (r *repository) FindCartByID(ID int) (Cart, error) {
 func (r *repository) FindCartsByPaymentID(paymentID int) ([]Cart, error) {
 	var carts []Cart
 	err := r.db.Where("payment_id = ?", paymentID).Find(&carts).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return []Cart{}, errors.New("Cart not found")
+	}
+	return carts, err
+}
+
+func (r *repository) FindCartsByProductID(productID int) ([]Cart, error) {
+	var carts []Cart
+	err := r.db.Where("product_id = ?", productID).Find(&carts).Error
 	if errors.Is(err, gorm.ErrRecordNotFound) {
 		return []Cart{}, errors.New("Cart not found")
 	}
