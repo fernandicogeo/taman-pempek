@@ -37,14 +37,14 @@ func (s *service) FindPaymentByUserAndStatus(userID int, paymentStatus string) (
 
 func (s *service) CreatePayment(paymentRequest PaymentCreateRequest) (Payment, error) {
 	paymentData := Payment{
-		UserID:         paymentRequest.UserID,
-		DeliveryID:     paymentRequest.DeliveryID,
-		TotalPrice:     paymentRequest.TotalPrice,
-		Image:          paymentRequest.Image.Filename,
-		Address:        paymentRequest.Address,
-		Whatsapp:       paymentRequest.Whatsapp,
-		PaymentStatus:  paymentRequest.PaymentStatus,
-		DeliveryStatus: paymentRequest.DeliveryStatus,
+		UserID:        paymentRequest.UserID,
+		DeliveryID:    paymentRequest.DeliveryID,
+		TotalPrice:    paymentRequest.TotalPrice,
+		Image:         paymentRequest.Image.Filename,
+		Address:       paymentRequest.Address,
+		Whatsapp:      paymentRequest.Whatsapp,
+		PaymentStatus: paymentRequest.PaymentStatus,
+		DeliveryName:  paymentRequest.DeliveryName,
 	}
 
 	payment, err := s.paymentRepository.CreatePayment(paymentData)
@@ -77,8 +77,8 @@ func (s *service) UpdatePayment(ID int, paymentRequest PaymentUpdateRequest) (Pa
 	if paymentRequest.PaymentStatus != "" {
 		payment.PaymentStatus = paymentRequest.PaymentStatus
 	}
-	if paymentRequest.DeliveryStatus != "" {
-		payment.DeliveryStatus = paymentRequest.DeliveryStatus
+	if paymentRequest.DeliveryName != "" {
+		payment.DeliveryName = paymentRequest.DeliveryName
 	}
 
 	return s.paymentRepository.UpdatePayment(payment)

@@ -295,15 +295,15 @@ func (ch *controller) DeletePayment(c *gin.Context) {
 
 func convertToPaymentResponse(payment Payment) PaymentResponse {
 	return PaymentResponse{
-		ID:             payment.ID,
-		UserID:         payment.UserID,
-		DeliveryID:     payment.DeliveryID,
-		TotalPrice:     payment.TotalPrice,
-		Image:          payment.Image,
-		Address:        payment.Address,
-		Whatsapp:       payment.Whatsapp,
-		PaymentStatus:  payment.PaymentStatus,
-		DeliveryStatus: payment.DeliveryStatus,
+		ID:            payment.ID,
+		UserID:        payment.UserID,
+		DeliveryID:    payment.DeliveryID,
+		TotalPrice:    payment.TotalPrice,
+		Image:         payment.Image,
+		Address:       payment.Address,
+		Whatsapp:      payment.Whatsapp,
+		PaymentStatus: payment.PaymentStatus,
+		DeliveryName:  payment.DeliveryName,
 	}
 }
 
