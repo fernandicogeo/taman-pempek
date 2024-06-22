@@ -41,6 +41,8 @@ func (s *service) CreatePayment(paymentRequest PaymentCreateRequest) (Payment, e
 		DeliveryID:     paymentRequest.DeliveryID,
 		TotalPrice:     paymentRequest.TotalPrice,
 		Image:          paymentRequest.Image.Filename,
+		Address:        paymentRequest.Address,
+		Whatsapp:       paymentRequest.Whatsapp,
 		PaymentStatus:  paymentRequest.PaymentStatus,
 		DeliveryStatus: paymentRequest.DeliveryStatus,
 	}
@@ -65,6 +67,12 @@ func (s *service) UpdatePayment(ID int, paymentRequest PaymentUpdateRequest) (Pa
 	}
 	if paymentRequest.TotalPrice != 0 {
 		payment.TotalPrice = paymentRequest.TotalPrice
+	}
+	if paymentRequest.Address != "" {
+		payment.Address = paymentRequest.Address
+	}
+	if paymentRequest.Whatsapp != "" {
+		payment.Whatsapp = paymentRequest.Whatsapp
 	}
 	if paymentRequest.PaymentStatus != "" {
 		payment.PaymentStatus = paymentRequest.PaymentStatus

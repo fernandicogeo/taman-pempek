@@ -9,6 +9,8 @@ type PaymentCreateRequest struct {
 	DeliveryID     int                  `form:"delivery_id"`
 	TotalPrice     int                  `form:"total_price" binding:"required"`
 	Image          multipart.FileHeader `form:"image" binding:"required"`
+	Address        string               `form:"address" binding:"required"`
+	Whatsapp       string               `form:"whatsapp" binding:"required"`
 	PaymentStatus  string               `form:"payment_status" binding:"required"`
 	DeliveryStatus string               `form:"delivery_status" binding:"required"`
 }

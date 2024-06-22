@@ -300,6 +300,8 @@ func convertToPaymentResponse(payment Payment) PaymentResponse {
 		DeliveryID:     payment.DeliveryID,
 		TotalPrice:     payment.TotalPrice,
 		Image:          payment.Image,
+		Address:        payment.Address,
+		Whatsapp:       payment.Whatsapp,
 		PaymentStatus:  payment.PaymentStatus,
 		DeliveryStatus: payment.DeliveryStatus,
 	}

@@ -10,6 +10,8 @@ type Payment struct {
 	DeliveryID     int       `gorm:"column:delivery_id;type:varchar(255)"`
 	TotalPrice     int       `gorm:"column:total_price;type:varchar(255)"`
 	Image          string    `gorm:"column:image;type:varchar(255)"`
+	Address        string    `gorm:"column:address;type:varchar(255)"`
+	Whatsapp       string    `gorm:"column:whatsapp;type:varchar(255)"`
 	PaymentStatus  string    `gorm:"column:payment_status;type:varchar(255)"`
 	DeliveryStatus string    `gorm:"column:delivery_status;type:varchar(255)"`
 	CreatedAt      time.Time `gorm:"column:created_at;autoCreateTime"`
