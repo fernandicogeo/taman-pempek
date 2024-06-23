@@ -78,6 +78,7 @@ func routeUser(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)
 	userController := user.NewController(userService)
 
 	v.GET("/users", userController.GetUsers)
+	v.GET("/users/role/:role", userController.FindUsersByRole)
 	v.GET("/user/:id", userController.GetUser)
 	v.POST("/user/register", userController.CreateUser)
 	v.PUT("/user/update/:id", userController.UpdateUser)

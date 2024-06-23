@@ -47,6 +47,34 @@ func (cn *controller) GetUsers(c *gin.Context) {
 	})
 }
 
+func (cn *controller) FindUsersByRole(c *gin.Context) {
+	role := c.Param("role")
+	users, err := cn.userService.FindUsersByRole(role)
+
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": true,
+			"data":  nil,
+			"msg":   err,
+		})
+		return
+	}
+
+	var usersResponse []UserResponse
+
+	for _, user := range users {
+		userResponse := convertToUserResponse(user)
+
+		usersResponse = append(usersResponse, userResponse)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"error": false,
+		"msg":   "Success!",
+		"data":  usersResponse,
+	})
+}
+
 func (cn *controller) GetUser(c *gin.Context) {
 	idString := c.Param("id")
 	id, err := strconv.Atoi(idString)

@@ -8,6 +8,7 @@ import (
 
 type UserRepository interface {
 	FindAll() ([]User, error)
+	FindUsersByRole(role string) ([]User, error)
 	FindUserByID(ID any) (User, error)
 	FindUserByEmail(email string) (User, error)
 	CreateUser(user User) (User, error)
@@ -26,6 +27,15 @@ func NewRepository(db *gorm.DB) *repository {
 func (r *repository) FindAll() ([]User, error) {
 	var users []User
 	err := r.db.Find(&users).Error
+	return users, err
+}
+
+func (r *repository) FindUsersByRole(role string) ([]User, error) {
+	var users []User
+	err := r.db.Where("role = ?", role).Find(&users).Error
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return []User{}, errors.New("User not found")
+	}
 	return users, err
 }
 
