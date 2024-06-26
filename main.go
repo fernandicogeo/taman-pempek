@@ -72,6 +72,7 @@ func migration(db *gorm.DB) {
 	db.AutoMigrate(&payment.Payment{})
 	db.AutoMigrate(&product.Product{})
 	db.AutoMigrate(&user.User{})
+	db.AutoMigrate(&setting.Setting{})
 }
 
 func routeUser(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)) {
