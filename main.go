@@ -10,6 +10,7 @@ import (
 	"taman-pempek/middleware"
 	"taman-pempek/payment"
 	"taman-pempek/product"
+	"taman-pempek/setting"
 	"taman-pempek/user"
 
 	"github.com/gin-gonic/gin"
@@ -58,6 +59,7 @@ func main() {
 	routeDelivery(db, v1, requireAuth)
 	routeCart(db, v1, requireAuth)
 	routePayment(db, v1, requireAuth)
+	routeSetting(db, v1, requireAuth)
 
 	router.Run(":8888") // port
 }
@@ -169,4 +171,13 @@ func routePayment(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Conte
 	v.POST("/payment/create", paymentController.CreatePayment)
 	v.PUT("/payment/update/:id", paymentController.UpdatePayment)
 	v.DELETE("/payment/delete/:id", paymentController.DeletePayment)
+}
+
+func routeSetting(db *gorm.DB, v *gin.RouterGroup, requireAuth func(c *gin.Context)) {
+	settingRepository := setting.NewRepository(db)
+	settingService := setting.NewService(settingRepository)
+	settingController := setting.NewController(settingService)
+
+	v.GET("/setting/:id", settingController.GetSetting)
+	v.PUT("/setting/update/:id", settingController.UpdateSetting)
 }
