@@ -7,4 +7,5 @@ type PaymentUpdateRequest struct {
 	Whatsapp      string `form:"whatsapp,omitempty"`
 	PaymentStatus string `form:"payment_status,omitempty"`
 	DeliveryName  string `form:"delivery_name,omitempty"`
+	Resi          string `form:"resi,omitempty"`
 }

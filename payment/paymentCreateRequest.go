@@ -13,4 +13,5 @@ type PaymentCreateRequest struct {
 	Whatsapp      string               `form:"whatsapp" binding:"required"`
 	PaymentStatus string               `form:"payment_status" binding:"required"`
 	DeliveryName  string               `form:"delivery_name" binding:"required"`
+	Resi          string               `form:"resi" binding:"required"`
 }

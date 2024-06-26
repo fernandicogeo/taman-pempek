@@ -50,6 +50,7 @@ func (s *service) CreatePayment(paymentRequest PaymentCreateRequest) (Payment, e
 		Whatsapp:      paymentRequest.Whatsapp,
 		PaymentStatus: paymentRequest.PaymentStatus,
 		DeliveryName:  paymentRequest.DeliveryName,
+		Resi:          paymentRequest.Resi,
 	}
 
 	payment, err := s.paymentRepository.CreatePayment(paymentData)
@@ -84,6 +85,9 @@ func (s *service) UpdatePayment(ID int, paymentRequest PaymentUpdateRequest) (Pa
 	}
 	if paymentRequest.DeliveryName != "" {
 		payment.DeliveryName = paymentRequest.DeliveryName
+	}
+	if paymentRequest.Resi != "" {
+		payment.Resi = paymentRequest.Resi
 	}
 
 	return s.paymentRepository.UpdatePayment(payment)

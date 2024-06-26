@@ -10,4 +10,5 @@ type PaymentResponse struct {
 	Whatsapp      string `json:"whatsapp"`
 	PaymentStatus string `json:"payment_status"`
 	DeliveryName  string `json:"delivery_name"`
+	Resi          string `json:"resi"`
 }

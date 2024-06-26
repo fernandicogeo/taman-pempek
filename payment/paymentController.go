@@ -333,6 +333,7 @@ func convertToPaymentResponse(payment Payment) PaymentResponse {
 		Whatsapp:      payment.Whatsapp,
 		PaymentStatus: payment.PaymentStatus,
 		DeliveryName:  payment.DeliveryName,
+		Resi:          payment.Resi,
 	}
 }
 

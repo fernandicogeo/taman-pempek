@@ -14,6 +14,7 @@ type Payment struct {
 	Whatsapp      string    `gorm:"column:whatsapp;type:varchar(255)"`
 	PaymentStatus string    `gorm:"column:payment_status;type:varchar(255)"`
 	DeliveryName  string    `gorm:"column:delivery_name;type:varchar(255)"`
+	Resi          string    `gorm:"column:resi;type:varchar(255)"`
 	CreatedAt     time.Time `gorm:"column:created_at;autoCreateTime"`
 	UpdatedAt     time.Time `gorm:"column:updated_at;autoUpdateTime"`
 }
