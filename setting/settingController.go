@@ -132,7 +132,9 @@ func convertToSettingResponse(setting Setting) SettingResponse {
 		ID:          setting.ID,
 		Image:       setting.Image,
 		Description: setting.Description,
-		Contact:     setting.Contact,
+		Email:       setting.Email,
+		Instagram:   setting.Instagram,
+		Website:     setting.Website,
 	}
 }
 

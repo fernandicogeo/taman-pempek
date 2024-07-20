@@ -4,5 +4,7 @@ type SettingResponse struct {
 	ID          uint64 `json:"id"`
 	Image       string `json:"image"`
 	Description string `json:"description"`
-	Contact     string `json:"contact"`
+	Email       string `json:"email"`
+	Instagram   string `json:"instagram"`
+	Website     string `json:"website"`
 }

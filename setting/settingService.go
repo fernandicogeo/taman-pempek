@@ -40,8 +40,14 @@ func (s *service) UpdateSetting(ID int, settingRequest SettingUpdateRequest) (Se
 	if settingRequest.Description != "" {
 		setting.Description = settingRequest.Description
 	}
-	if settingRequest.Contact != "" {
-		setting.Contact = settingRequest.Contact
+	if settingRequest.Email != "" {
+		setting.Email = settingRequest.Email
+	}
+	if settingRequest.Instagram != "" {
+		setting.Instagram = settingRequest.Instagram
+	}
+	if settingRequest.Website != "" {
+		setting.Website = settingRequest.Website
 	}
 
 	return s.settingRepository.UpdateSetting(setting)
